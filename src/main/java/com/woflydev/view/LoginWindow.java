@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Globals;
@@ -116,7 +118,7 @@ public class LoginWindow extends JFrame implements ActionListener {
 
     public static void open() {
         if (instance == null) {
-            UserUtils.initializeSystem();
+            FileUtils.initializeSystem();
             instance = new LoginWindow();
             instance.setVisible(true);
         }

@@ -109,7 +109,7 @@ public class RegisterWindow extends JFrame implements ActionListener {
         setSize(450, 500);
         setLocationRelativeTo(null);
 
-        FileUtils.createBlank("users.json");
+        FileUtils.initializeSystem();
         users = FileUtils.loadListFromDisk("users.json", User[].class);
         if (users == null) {
             users = new ArrayList<>();

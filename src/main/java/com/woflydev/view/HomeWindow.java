@@ -104,7 +104,7 @@ public class HomeWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == createBookingButton) {
-            System.out.println("Create Booking button clicked");
+            CreateBookingWindow.open();
         } else if (e.getSource() == manageBookingsButton) {
             System.out.println("Manage Bookings button clicked");
         } else if (e.getSource() == settingsButton) {
@@ -113,6 +113,7 @@ public class HomeWindow extends JFrame implements ActionListener {
             AdminToolsWindow.open();
         }
     }
+
 
     public static void open() {
         if (instance == null) {

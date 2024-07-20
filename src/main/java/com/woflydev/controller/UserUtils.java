@@ -9,45 +9,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.woflydev.controller.FileUtils.initializeSystem;
 import static com.woflydev.model.Globals.*;
 
 public class UserUtils {
-
-    public static void initializeSystem() {
-        // Ensure the owner file exists and is initialized
-        File ownerFile = new File(OWNER_FILE);
-        if (!ownerFile.exists()) {
-            System.out.println("Initializing owner file...");
-            Owner owner = new Owner(
-                    "Admin",
-                    "User",
-                    "admin@autolinkpro.com",
-                    BCryptHash.hashString("admin")
-            );
-
-            ArrayList<Owner> owners = new ArrayList<>();
-            owners.add(owner);
-            FileUtils.saveToDisk(owners, OWNER_FILE);
-        }
-
-        // Ensure the users file exists and is initialized
-        File usersFile = new File(USER_FILE);
-        if (!usersFile.exists()) {
-            System.out.println("Initializing users file...");
-            List<User> users = new ArrayList<>();
-            FileUtils.saveToDisk(users, USER_FILE);
-        }
-    }
-
-    private static List<User> getUsers() {
-        initializeSystem(); // Ensure system is initialized
-        FileUtils.createBlank(USER_FILE);
+    public static List<User> getUsers() {
+        FileUtils.initializeSystem(); // Ensure system is initialized
         List<User> users = FileUtils.loadListFromDisk(USER_FILE, User[].class);
         return users != null ? users : new ArrayList<>();
     }
 
     private static Owner getOwner() {
-        FileUtils.createBlank(OWNER_FILE);
+        FileUtils.initializeSystem();
         List<Owner> owners = FileUtils.loadListFromDisk(OWNER_FILE, Owner[].class);
         return (owners != null && !owners.isEmpty()) ? owners.get(0) : null;
     }
@@ -55,6 +28,12 @@ public class UserUtils {
     public static void addUser(User user) {
         List<User> users = getUsers();
         users.add(user);
+        FileUtils.saveToDisk(users, USER_FILE);
+    }
+
+    public static void deleteUser(String email) {
+        List<User> users = getUsers();
+        users.removeIf(user -> user.getEmail().equals(email));
         FileUtils.saveToDisk(users, USER_FILE);
     }
 
@@ -93,8 +72,8 @@ public class UserUtils {
     }
 
     public static boolean hasPrivilege(String email, short requiredPrivilege) {
-            if (isOwner(email)) {
-                return true; // Owner has the highest privilege
+        if (isOwner(email)) {
+            return true; // Owner has the highest privilege
         }
         User user = findUserByEmail(email);
         return user != null && user.getPrivilege() <= requiredPrivilege;

@@ -87,11 +87,9 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
             System.out.println("Manage Customers button clicked");
             // Code to handle manage customers
         } else if (e.getSource() == manageStaffButton) {
-            System.out.println("Manage Staff button clicked");
-            // Code to handle manage staff
+            ManageStaffWindow.open();
         } else if (e.getSource() == manageCarsButton) {
-            System.out.println("Manage Cars button clicked");
-            // Code to handle manage cars
+            ManageCarsWindow.open();
         }
     }
 
