@@ -17,4 +17,20 @@ public class Customer extends User {
         this.license = license;
         this.dob = dob;
     }
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public LocalDateTime getDob() {
+        return dob;
+    }
+
+    public void setDob(LocalDateTime dob) {
+        this.dob = dob;
+    }
 }

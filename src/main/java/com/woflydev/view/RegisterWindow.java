@@ -5,15 +5,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import com.woflydev.controller.FileUtils;
+import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
+import com.woflydev.model.Customer;
 import com.woflydev.model.User;
 import com.woflydev.controller.hash.BCryptHash;
 import com.woflydev.model.Globals;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RegisterWindow extends JFrame implements ActionListener {
@@ -110,10 +112,6 @@ public class RegisterWindow extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
 
         FileUtils.initializeSystem();
-        users = FileUtils.loadListFromDisk("users.json", User[].class);
-        if (users == null) {
-            users = new ArrayList<>();
-        }
     }
 
     @Override
@@ -125,15 +123,20 @@ public class RegisterWindow extends JFrame implements ActionListener {
             String password = new String(passwordField.getPassword());
             String license = licenseField.getText();
             Date dob = (Date) dobSpinner.getValue();
-            LocalDate dobLocal = dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDateTime dobLocalDateTime = dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
             String hashedPassword = BCryptHash.hashString(password);
 
-            // Assuming CUSTOMER privilege for new users
-            User newUser = new User(firstName, lastName, email, hashedPassword, Globals.PRIVILEGE_CUSTOMER);
+            Customer newCustomer = new Customer(
+                    firstName,
+                    lastName,
+                    email,
+                    hashedPassword,
+                    license,
+                    dobLocalDateTime
+            );
 
-            users.add(newUser);
-            FileUtils.saveToDisk(users, "users.json");
+            UserUtils.addUser(newCustomer);
 
             WindowUtils.infoBox("Registration successful");
             LoginWindow.open();

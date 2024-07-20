@@ -86,8 +86,7 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == manageCustomersButton) {
-            System.out.println("Manage Customers button clicked");
-            // Code to handle manage customers
+            ManageCustomersWindow.open();
         } else if (e.getSource() == manageStaffButton) {
             ManageStaffWindow.open();
         } else if (e.getSource() == manageCarsButton) {

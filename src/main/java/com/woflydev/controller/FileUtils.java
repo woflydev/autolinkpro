@@ -1,7 +1,9 @@
 package com.woflydev.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.woflydev.controller.adapter.LocalDateTimeAdapter;
 import com.woflydev.controller.hash.BCryptHash;
 import com.woflydev.model.Car;
 import com.woflydev.model.Owner;
@@ -9,6 +11,7 @@ import com.woflydev.model.User;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,15 @@ import static com.woflydev.model.Globals.OWNER_FILE;
 import static com.woflydev.model.Globals.USER_FILE;
 
 public class FileUtils {
+
+    private static final Gson gson;
+
+    static {
+        gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .create();
+    }
+
     public static void initializeSystem() {
         // Ensure the owner file exists and is initialized
         File ownerFile = new File(OWNER_FILE);
@@ -52,7 +64,6 @@ public class FileUtils {
 
     public static void saveToDisk(Object data, String filename) {
         try (Writer writer = new FileWriter(filename)) {
-            Gson gson = new Gson();
             gson.toJson(data, writer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,7 +72,6 @@ public class FileUtils {
 
     public static <T> T loadFromDisk(String filename, Class<T> clazz) {
         try (Reader reader = new FileReader(filename)) {
-            Gson gson = new Gson();
             return gson.fromJson(reader, clazz);
         } catch (FileNotFoundException e) {
             return null;
@@ -73,7 +83,6 @@ public class FileUtils {
 
     public static <T> List<T> loadListFromDisk(String filename, Class<T[]> clazz) {
         try (Reader reader = new FileReader(filename)) {
-            Gson gson = new Gson();
             Type listType = TypeToken.getParameterized(List.class, clazz.getComponentType()).getType();
             return gson.fromJson(reader, listType);
         } catch (FileNotFoundException e) {

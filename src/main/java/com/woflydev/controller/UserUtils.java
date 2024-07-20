@@ -1,6 +1,7 @@
 package com.woflydev.controller;
 
 import com.woflydev.controller.hash.BCryptHash;
+import com.woflydev.model.Customer;
 import com.woflydev.model.Owner;
 import com.woflydev.model.Staff;
 import com.woflydev.model.User;
@@ -18,6 +19,12 @@ public class UserUtils {
         FileUtils.initializeSystem(); // Ensure system is initialized
         List<User> users = FileUtils.loadListFromDisk(USER_FILE, User[].class);
         return users != null ? users : new ArrayList<>();
+    }
+
+    public static List<Customer> getCustomers() {
+        FileUtils.initializeSystem();
+        List<Customer> customers = FileUtils.loadListFromDisk(USER_FILE, Customer[].class);
+        return customers != null ? customers : new ArrayList<>();
     }
 
     public static List<Staff> getStaff() {
@@ -82,7 +89,7 @@ public class UserUtils {
             return true; // Owner has the highest privilege
         }
         User user = findUserByEmail(email);
-        return user != null && user.getPrivilege() <= requiredPrivilege;
+        return user != null && user.getPrivilege() < requiredPrivilege;
     }
 
     public static void updateUser(User updatedUser) {

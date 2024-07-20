@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static com.woflydev.controller.UserUtils.findUserByEmail;
 import static com.woflydev.model.Globals.PRIVILEGE_STAFF;
 import static com.woflydev.controller.UserUtils.hasPrivilege;
 import java.util.ArrayList;
@@ -103,6 +105,8 @@ public class HomeWindow extends JFrame implements ActionListener {
         gbc.gridx = 1;
         gbc.gridy = 2;
 
+        System.out.println("current user email " + Globals.CURRENT_USER_EMAIL + ", current privilege " + findUserByEmail(Globals.CURRENT_USER_EMAIL).getPrivilege());
+        System.out.println(hasPrivilege(Globals.CURRENT_USER_EMAIL, PRIVILEGE_STAFF));
         if (hasPrivilege(Globals.CURRENT_USER_EMAIL, PRIVILEGE_STAFF)) {
             mainPanel.add(adminButton, gbc);
         }
