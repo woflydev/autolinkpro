@@ -120,6 +120,42 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
         }
     }
 
+    private void editCar(String carId) {
+        Car car = CarUtils.getCarById(carId);
+        if (car == null) {
+            WindowUtils.errorBox("Car not found.");
+            return;
+        }
+
+        JTextField makeField = new JTextField(car.getMake(), 20);
+        JTextField modelField = new JTextField(car.getModel(), 20);
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Make:"));
+        panel.add(makeField);
+        panel.add(Box.createHorizontalStrut(15)); // Spacer
+        panel.add(new JLabel("Model:"));
+        panel.add(modelField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel,
+                "Edit car details", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String make = makeField.getText();
+            String model = modelField.getText();
+
+            if (!make.isEmpty() && !model.isEmpty()) {
+                car.setMake(make);
+                car.setModel(model);
+                CarUtils.updateCar(car);
+                updateTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Make and Model cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
     private void updateTable() {
         List<Car> cars = FileUtils.loadListFromDisk("cars.json", Car[].class);
         String[] columnNames = {"ID", "Make", "Model", "Actions"};
@@ -131,25 +167,29 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
                 data[i][0] = car.getId();
                 data[i][1] = car.getMake();
                 data[i][2] = car.getModel();
-                data[i][3] = "Delete"; // Action button text
+                data[i][3] = "Edit/Delete";
             }
         }
 
-        // Ensure tableModel is initialized before setting data
         if (tableModel != null) {
             tableModel.setDataVector(data, columnNames);
 
-            // Reapply renderer and editor
+            carTable.setRowHeight(75);
             carTable.getColumn("Actions").setCellRenderer(new ButtonRenderer(new String[]{"Edit", "Delete"}));
             carTable.getColumn("Actions").setCellEditor(
-                new ButtonEditor(new JCheckBox(), new String[]{"Delete",""}, new Runnable[]{
-                        () -> {
-                            int row = carTable.getSelectedRow();
-                            String id = (String) tableModel.getValueAt(row, 0);
-                            CarUtils.deleteCar(id);
-                            updateTable();
-                        }
-                }));
+                    new ButtonEditor(new JCheckBox(), new String[]{"Edit", "Delete"}, new Runnable[]{
+                            () -> {
+                                int row = carTable.getSelectedRow();
+                                String id = (String) tableModel.getValueAt(row, 0);
+                                editCar(id);
+                            },
+                            () -> {
+                                int row = carTable.getSelectedRow();
+                                String id = (String) tableModel.getValueAt(row, 0);
+                                CarUtils.deleteCar(id);
+                                updateTable();
+                            }
+                    }));
         }
     }
 

@@ -270,16 +270,13 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
-                        "Edit/Delete" // Action button text
+                        "Edit/Delete"
                 })
                 .toArray(Object[][]::new);
 
         tableModel.setDataVector(data, columnNames);
 
-        // Set row height for the table
-        staffTable.setRowHeight(100); // Adjust as needed
-
-        // Reapply renderer and editor with vertical button layout
+        staffTable.setRowHeight(75);
         staffTable.getColumn("Actions").setCellRenderer(new ButtonRenderer(new String[]{"Edit", "Delete"}));
         staffTable.getColumn("Actions").setCellEditor(new ButtonEditor(new JCheckBox(), new String[]{"Edit", "Delete"}, new Runnable[]{
                 () -> {
