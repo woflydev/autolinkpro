@@ -10,13 +10,13 @@ import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Customer;
 import com.woflydev.model.User;
 import com.woflydev.controller.hash.BCryptHash;
-import com.woflydev.model.Globals;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.woflydev.model.Globals.CUSTOMERS_FILE;
 
 public class RegisterWindow extends JFrame implements ActionListener {
     private static RegisterWindow instance = null;
@@ -123,7 +123,7 @@ public class RegisterWindow extends JFrame implements ActionListener {
             String password = new String(passwordField.getPassword());
             String license = licenseField.getText();
             Date dob = (Date) dobSpinner.getValue();
-            LocalDateTime dobLocalDateTime = dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+            LocalDateTime dobLocalDateTime = dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
 
             String hashedPassword = BCryptHash.hashString(password);
 
@@ -136,7 +136,7 @@ public class RegisterWindow extends JFrame implements ActionListener {
                     dobLocalDateTime
             );
 
-            UserUtils.addUser(newCustomer);
+            UserUtils.addCustomer(newCustomer);
 
             WindowUtils.infoBox("Registration successful");
             LoginWindow.open();

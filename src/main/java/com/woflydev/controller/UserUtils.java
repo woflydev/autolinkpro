@@ -1,117 +1,106 @@
 package com.woflydev.controller;
 
 import com.woflydev.controller.hash.BCryptHash;
-import com.woflydev.model.Customer;
-import com.woflydev.model.Owner;
-import com.woflydev.model.Staff;
-import com.woflydev.model.User;
+import com.woflydev.model.*;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.woflydev.controller.FileUtils.initializeSystem;
 import static com.woflydev.model.Globals.*;
 
 public class UserUtils {
-    public static List<User> getUsers() {
-        FileUtils.initializeSystem(); // Ensure system is initialized
-        List<User> users = FileUtils.loadListFromDisk(USER_FILE, User[].class);
-        return users != null ? users : new ArrayList<>();
-    }
 
-    public static List<Customer> getCustomers() {
+    private static <T> List<T> getEntityList(String fileName, Class<T[]> clazz) {
         FileUtils.initializeSystem();
-        List<Customer> customers = FileUtils.loadListFromDisk(USER_FILE, Customer[].class);
-        return customers != null ? customers : new ArrayList<>();
+        List<T> entities = FileUtils.loadListFromDisk(fileName, clazz);
+        return entities != null ? entities : new ArrayList<>();
     }
 
-    public static List<Staff> getStaff() {
-        FileUtils.initializeSystem();
-        List<Staff> staff = FileUtils.loadListFromDisk(USER_FILE, Staff[].class);
-        return staff != null ? staff : new ArrayList<>();
+    private static <T> void saveEntityList(List<T> entities, String fileName) {
+        FileUtils.saveToDisk(entities, fileName);
     }
 
-    private static Owner getOwner() {
-        FileUtils.initializeSystem();
-        List<Owner> owners = FileUtils.loadListFromDisk(OWNER_FILE, Owner[].class);
-        return (owners != null && !owners.isEmpty()) ? owners.get(0) : null;
+    private static <T> void addEntity(T entity, String fileName, Class<T[]> clazz) {
+        List<T> entities = getEntityList(fileName, clazz);
+        entities.add(entity);
+        saveEntityList(entities, fileName);
     }
 
-    public static void addUser(User user) {
-        List<User> users = getUsers();
-        users.add(user);
-        FileUtils.saveToDisk(users, USER_FILE);
+    private static <T> void deleteEntity(String fileName, Class<T[]> clazz, String email, EmailGetter<T> emailGetter) {
+        List<T> entities = getEntityList(fileName, clazz);
+        entities.removeIf(entity -> emailGetter.getEmail(entity).equals(email));
+        saveEntityList(entities, fileName);
     }
 
-    public static void deleteUser(String email) {
-        List<User> users = getUsers();
-        users.removeIf(user -> user.getEmail().equals(email));
-        FileUtils.saveToDisk(users, USER_FILE);
-    }
-
-    public static @Nullable User findUserByEmail(String email) {
-        Owner owner = getOwner();
-        if (owner != null && owner.getEmail().equals(email)) {
-            return new User(owner.getFirstName(), owner.getLastName(), owner.getEmail(), owner.getPassword(), PRIVILEGE_OWNER);
-        }
-
-        List<User> users = getUsers();
-        for (User user : users) {
-            if (user.getEmail().equals(email)) {
-                return user;
+    private static <T> T getEntityByEmail(String fileName, Class<T[]> clazz, String email, EmailGetter<T> emailGetter) {
+        List<T> entities = getEntityList(fileName, clazz);
+        for (T entity : entities) {
+            if (emailGetter.getEmail(entity).equals(email)) {
+                return entity;
             }
         }
         return null;
     }
 
-
-    public static boolean authenticate(String email, String password) {
-        // Check if the email belongs to the owner
-        Owner owner = getOwner();
-        if (owner != null && owner.getEmail().equals(email)) {
-            return BCryptHash.verifyHash(password, owner.getPassword());
-        }
-
-        // Check if the email belongs to a user
-        User user = findUserByEmail(email);
-        return user != null && BCryptHash.verifyHash(password, user.getPassword());
-    }
-
-    public static boolean isOwner(String email) {
-        Owner owner = getOwner();
-        return owner != null && owner.getEmail().equals(email);
-    }
-
-    public static boolean hasPrivilege(String email, short requiredPrivilege) {
-        if (isOwner(email)) {
-            return true; // Owner has the highest privilege
-        }
-        User user = findUserByEmail(email);
-        return user != null && user.getPrivilege() < requiredPrivilege;
-    }
-
-    public static void updateUser(User updatedUser) {
-        List<User> users = getUsers();
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getEmail().equals(updatedUser.getEmail())) {
-                users.set(i, updatedUser);
-                FileUtils.saveToDisk(users, USER_FILE);
+    private static <T> void updateEntity(String fileName, Class<T[]> clazz, T updatedEntity, EmailGetter<T> emailGetter) {
+        List<T> entities = getEntityList(fileName, clazz);
+        for (int i = 0; i < entities.size(); i++) {
+            if (emailGetter.getEmail(entities.get(i)).equals(emailGetter.getEmail(updatedEntity))) {
+                entities.set(i, updatedEntity);
+                saveEntityList(entities, fileName);
                 return;
             }
         }
+    }
 
-        // If the user to update is the owner, update the owner's details
+    public static boolean authenticate(String email, String password) {
         Owner owner = getOwner();
-        if (owner != null && owner.getEmail().equals(updatedUser.getEmail())) {
-            owner.setFirstName(updatedUser.getFirstName());
-            owner.setLastName(updatedUser.getLastName());
-            owner.setEmail(updatedUser.getEmail());
-            owner.setPassword(updatedUser.getPassword());
-            List<Owner> owners = new ArrayList<>();
-            owners.add(owner);
-            FileUtils.saveToDisk(owners, OWNER_FILE);
-        }
+        Staff staff = getStaffByEmail(email);
+
+        if (owner != null && owner.getEmail().equals(email))
+            return BCryptHash.verifyHash(password, owner.getPassword());
+        else if (staff != null && staff.getEmail().equals(email))
+            return BCryptHash.verifyHash(password, staff.getPassword());
+
+        Customer customer = getCustomerByEmail(email);
+        return customer != null && BCryptHash.verifyHash(password, customer.getPassword());
+    }
+
+    //------------------------------------helper methods--------------------------------------------------\\
+
+    public static boolean hasPrivilege(String email, short requiredPrivilege) {
+        if (getOwner() != null && getOwner().getEmail().equals(email))
+            return true; // Owner has the highest privilege
+        else if (getStaffByEmail(email) != null && getStaffByEmail(email).getEmail().equals(email))
+            return getStaffByEmail(email).getPrivilege() < requiredPrivilege;
+
+        Customer customer = getCustomerByEmail(email);
+        return customer != null && customer.getPrivilege() < requiredPrivilege;
+    }
+
+    public static List<Staff> getStaffList() { return getEntityList(STAFF_FILE, Staff[].class); }
+    public static List<Customer> getCustomerList() { return getEntityList(CUSTOMERS_FILE, Customer[].class); }
+    public static @Nullable Staff getStaffByEmail(String email) { return getEntityByEmail(STAFF_FILE, Staff[].class, email, Staff::getEmail); }
+    public static @Nullable Customer getCustomerByEmail(String email) { return getEntityByEmail(CUSTOMERS_FILE, Customer[].class, email, Customer::getEmail); }
+
+    public static void addStaff(Staff staff) { addEntity(staff, STAFF_FILE, Staff[].class); }
+    public static void addCustomer(Customer customer) { addEntity(customer, CUSTOMERS_FILE, Customer[].class); }
+
+    public static void deleteStaff(String email) { deleteEntity(STAFF_FILE, Staff[].class, email, Staff::getEmail); }
+    public static void deleteCustomer(String email) { deleteEntity(CUSTOMERS_FILE, Customer[].class, email, Customer::getEmail); }
+
+    public static void updateStaff(Staff updatedStaff) { updateEntity(STAFF_FILE, Staff[].class, updatedStaff, Staff::getEmail); }
+    public static void updateCustomer(Customer updatedCustomer) { updateEntity(CUSTOMERS_FILE, Customer[].class, updatedCustomer, Customer::getEmail); }
+
+
+    public static Owner getOwner() { // shorthand
+        List<Owner> owners = FileUtils.loadListFromDisk(OWNER_FILE, Owner[].class);
+        return (owners != null && !owners.isEmpty()) ? owners.get(0) : null;
+    }
+
+    @FunctionalInterface
+    public interface EmailGetter<T> {
+        String getEmail(T entity);
     }
 }

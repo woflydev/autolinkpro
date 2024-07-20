@@ -1,8 +1,9 @@
 package com.woflydev.model;
 
 public class Globals {
-    public static final String USER_FILE = "users.json";
+    public static final String CUSTOMERS_FILE = "customers.json";
     public static final String OWNER_FILE = "owner.json";
+    public static final String STAFF_FILE = "staff.json";
     public static final String CARS_FILE = "cars.json";
 
     public static final short PRIVILEGE_NONE = -1;

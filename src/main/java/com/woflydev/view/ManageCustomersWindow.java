@@ -5,7 +5,6 @@ import com.woflydev.controller.WindowUtils;
 import com.woflydev.controller.hash.BCryptHash;
 import com.woflydev.model.Customer;
 import com.woflydev.model.Globals;
-import com.woflydev.model.User;
 import com.woflydev.view.table.ButtonEditor;
 import com.woflydev.view.table.ButtonRenderer;
 
@@ -15,7 +14,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
+
+import static com.woflydev.model.Globals.CUSTOMERS_FILE;
 
 public class ManageCustomersWindow extends JFrame implements ActionListener {
     public static ManageCustomersWindow instance = null;
@@ -198,7 +201,7 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
 
             if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !license.isEmpty() && dob != null && !password.isEmpty()) {
                 Customer newCustomer = new Customer(firstName, lastName, email, password, license, dob);
-                UserUtils.addUser(newCustomer);
+                UserUtils.addCustomer(newCustomer);
                 updateTable();
             } else {
                 JOptionPane.showMessageDialog(null, "All fields must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -207,20 +210,23 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
     }
 
     private void editCustomer(String email) {
-        User user = UserUtils.findUserByEmail(email);
+        Customer customer = UserUtils.getCustomerByEmail(email);
 
-        if (user == null || user.getPrivilege() != Globals.PRIVILEGE_CUSTOMER) {
+        if (customer == null || customer.getPrivilege() != Globals.PRIVILEGE_CUSTOMER) {
             JOptionPane.showMessageDialog(null, "Customer not found.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        Customer customer = (Customer) user;
 
         JTextField firstNameField = new JTextField(customer.getFirstName(), 20);
         JTextField lastNameField = new JTextField(customer.getLastName(), 20);
         JTextField emailField = new JTextField(customer.getEmail(), 20);
         JTextField licenseField = new JTextField(customer.getLicense(), 20);
-        JTextField dobField = new JTextField(customer.getDob().toString(), 20);
+
+        JSpinner dobSpinner = new JSpinner(new SpinnerDateModel());
+        JSpinner.DateEditor dobEditor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd'T'HH:mm:ss");
+        dobSpinner.setEditor(dobEditor);
+
+        JTextField passwordField = new JPasswordField(20);
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -279,15 +285,14 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.EAST;
-        panel.add(new JLabel("Date of Birth (YYYY-MM-DDTHH:MM):"), gbc);
+        panel.add(new JLabel("Date of Birth:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.WEST;
-        panel.add(dobField, gbc);
+        panel.add(dobSpinner, gbc);
 
         // Password
-        JTextField passwordField = new JPasswordField(20);
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.EAST;
@@ -307,14 +312,8 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
             String lastName = lastNameField.getText();
             String newEmail = emailField.getText();
             String license = licenseField.getText();
-            String dobString = dobField.getText();
-            LocalDateTime dob = null;
-            try {
-                dob = LocalDateTime.parse(dobString);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Invalid date format. Please use YYYY-MM-DDTHH:MM.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            Date dobDate = (Date) dobSpinner.getValue();
+            LocalDateTime dob = dobDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
             String password = passwordField.getText().isEmpty() ? customer.getPassword() : BCryptHash.hashString(passwordField.getText());
 
             if (!firstName.isEmpty() && !lastName.isEmpty() && !newEmail.isEmpty() && !license.isEmpty() && dob != null) {
@@ -324,7 +323,8 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
                 customer.setLicense(license);
                 customer.setDob(dob);
                 customer.setPassword(password);
-                UserUtils.updateUser(customer);
+
+                UserUtils.updateCustomer(customer);
                 updateTable();
             } else {
                 JOptionPane.showMessageDialog(null, "All fields except password must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -333,14 +333,12 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
     }
 
     private void updateTable() {
-        List<Customer> users = UserUtils.getCustomers();
-        System.out.println(users);
+        List<Customer> users = UserUtils.getCustomerList();
         String[] columnNames = {"First Name", "Last Name", "Email", "License", "Date of Birth", "Actions"};
         Object[][] data = users.stream()
                 .filter(user -> user.getPrivilege() == Globals.PRIVILEGE_CUSTOMER)
                 .map(user -> {
                     Customer customer = (Customer) user;
-                    System.out.println(customer.getLicense());
                     return new Object[]{
                             customer.getFirstName(),
                             customer.getLastName(),
@@ -368,7 +366,7 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
                     int row = customerTable.getSelectedRow();
                     if (row >= 0) {
                         String email = (String) tableModel.getValueAt(row, 2);
-                        UserUtils.deleteUser(email);
+                        UserUtils.deleteCustomer(email);
                         updateTable();
                     }
                 }

@@ -5,7 +5,6 @@ import com.woflydev.controller.WindowUtils;
 import com.woflydev.controller.hash.BCryptHash;
 import com.woflydev.model.Globals;
 import com.woflydev.model.Staff;
-import com.woflydev.model.User;
 import com.woflydev.view.table.ButtonEditor;
 import com.woflydev.view.table.ButtonRenderer;
 
@@ -15,6 +14,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+
+import static com.woflydev.model.Globals.STAFF_FILE;
 
 public class ManageStaffWindow extends JFrame implements ActionListener {
     public static ManageStaffWindow instance = null;
@@ -164,7 +165,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
 
             if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
                 Staff newStaff = new Staff(firstName, lastName, email, password);
-                UserUtils.addUser(newStaff);
+                UserUtils.addStaff(newStaff);
                 updateTable();
             } else {
                 JOptionPane.showMessageDialog(null, "All fields must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -173,7 +174,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
     }
 
     private void editStaff(String email) {
-        User staff = UserUtils.findUserByEmail(email);
+        Staff staff = UserUtils.getStaffByEmail(email);
 
         if (staff == null || staff.getPrivilege() > Globals.PRIVILEGE_STAFF) {
             JOptionPane.showMessageDialog(null, "Staff not found.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -253,7 +254,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
                 staff.setLastName(lastName);
                 staff.setEmail(newEmail);
                 staff.setPassword(password);
-                UserUtils.updateUser(staff);
+                UserUtils.updateStaff(staff);
                 updateTable();
             } else {
                 JOptionPane.showMessageDialog(null, "All fields except password must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -262,7 +263,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
     }
 
     private void updateTable() {
-        List<User> users = UserUtils.getUsers();
+        List<Staff> users = UserUtils.getStaffList();
         String[] columnNames = {"First Name", "Last Name", "Email", "Actions"};
         Object[][] data = users.stream()
                 .filter(user -> user.getPrivilege() == Globals.PRIVILEGE_STAFF)
@@ -290,7 +291,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
                     int row = staffTable.getSelectedRow();
                     if (row >= 0) {
                         String email = (String) tableModel.getValueAt(row, 2);
-                        UserUtils.deleteUser(email);
+                        UserUtils.deleteCustomer(email);
                         updateTable();
                     }
                 }
