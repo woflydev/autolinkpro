@@ -1,5 +1,7 @@
 package com.woflydev.view;
 
+import com.woflydev.controller.WindowUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -96,7 +98,7 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
     public static void open() {
         if (instance == null) {
             instance = new AdminToolsWindow();
-            instance.setVisible(true);
+            WindowUtils.register(instance);
         }
     }
 

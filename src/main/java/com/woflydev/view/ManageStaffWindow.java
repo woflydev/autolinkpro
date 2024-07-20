@@ -1,6 +1,8 @@
 package com.woflydev.view;
 
 import com.woflydev.controller.UserUtils;
+import com.woflydev.controller.WindowUtils;
+import com.woflydev.controller.hash.BCryptHash;
 import com.woflydev.model.Globals;
 import com.woflydev.model.Staff;
 import com.woflydev.model.User;
@@ -26,14 +28,37 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
+        // Main panel for buttons and table
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
 
+        // Heading label
+        JLabel headingLabel = new JLabel("Manage Staff", SwingConstants.CENTER);
+        headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weighty = 0.1; // Allow the heading to occupy some vertical space
+        mainPanel.add(headingLabel, gbc);
+
+        // Add Staff button
         addStaffButton = new JButton("Add New Staff");
+        addStaffButton.setPreferredSize(new Dimension(150, 40));
+        addStaffButton.setBackground(new Color(0, 120, 215));
+        addStaffButton.setForeground(Color.WHITE);
+        addStaffButton.setFocusPainted(false);
         addStaffButton.addActionListener(this);
-        buttonPanel.add(addStaffButton);
-
-        add(buttonPanel, BorderLayout.NORTH);
+        gbc.gridwidth = 1; // Reset gridwidth for button
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weighty = 0.0; // Reset weighty for button
+        mainPanel.add(addStaffButton, gbc);
 
         // Initialize tableModel before setting up the table
         String[] columnNames = {"First Name", "Last Name", "Email", "Actions"};
@@ -41,16 +66,24 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         staffTable = new JTable(tableModel);
         staffTable.setCellSelectionEnabled(true);
         staffTable.setAutoCreateRowSorter(true);
+        staffTable.setFillsViewportHeight(true);
 
         // Add the table to the scroll pane
         JScrollPane scrollPane = new JScrollPane(staffTable);
-        add(scrollPane, BorderLayout.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.weighty = 1.0; // Allow the table to take up remaining vertical space
+        gbc.fill = GridBagConstraints.BOTH;
+        mainPanel.add(scrollPane, gbc);
 
-        // Set initial table data
-        updateTable();
+        add(mainPanel, BorderLayout.CENTER);
 
         setSize(700, 400);
         setLocationRelativeTo(null);
+
+        // Set initial table data
+        updateTable();
     }
 
     @Override
@@ -66,18 +99,58 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         JTextField emailField = new JTextField(20);
         JTextField passwordField = new JPasswordField(20);
 
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("First Name:"));
-        panel.add(firstNameField);
-        panel.add(Box.createHorizontalStrut(15)); // Spacer
-        panel.add(new JLabel("Last Name:"));
-        panel.add(lastNameField);
-        panel.add(Box.createHorizontalStrut(15)); // Spacer
-        panel.add(new JLabel("Email:"));
-        panel.add(emailField);
-        panel.add(Box.createHorizontalStrut(15)); // Spacer
-        panel.add(new JLabel("Password:"));
-        panel.add(passwordField);
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+
+        // First Name
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("First Name:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(firstNameField, gbc);
+
+        // Last Name
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Last Name:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(lastNameField, gbc);
+
+        // Email
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Email:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(emailField, gbc);
+
+        // Password
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Password:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(passwordField, gbc);
 
         int result = JOptionPane.showConfirmDialog(null, panel,
                 "Enter new staff details", JOptionPane.OK_CANCEL_OPTION,
@@ -87,7 +160,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String email = emailField.getText();
-            String password = passwordField.getText();
+            String password = BCryptHash.hashString(passwordField.getText());
 
             if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
                 Staff newStaff = new Staff(firstName, lastName, email, password);
@@ -95,6 +168,95 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
                 updateTable();
             } else {
                 JOptionPane.showMessageDialog(null, "All fields must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void editStaff(String email) {
+        User staff = UserUtils.findUserByEmail(email);
+
+        if (staff == null || staff.getPrivilege() > Globals.PRIVILEGE_STAFF) {
+            JOptionPane.showMessageDialog(null, "Staff not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JTextField firstNameField = new JTextField(staff.getFirstName(), 20);
+        JTextField lastNameField = new JTextField(staff.getLastName(), 20);
+        JTextField emailField = new JTextField(staff.getEmail(), 20);
+        JTextField passwordField = new JPasswordField(20);
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.setBackground(Color.WHITE);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+
+        // First Name
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("First Name:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(firstNameField, gbc);
+
+        // Last Name
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Last Name:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(lastNameField, gbc);
+
+        // Email
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Email:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(emailField, gbc);
+
+        // Password
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Password:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(passwordField, gbc);
+
+        int result = JOptionPane.showConfirmDialog(null, panel,
+                "Edit staff details", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+
+        if (result == JOptionPane.OK_OPTION) {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String newEmail = emailField.getText();
+            String password = passwordField.getText().isEmpty() ? staff.getPassword() : BCryptHash.hashString(passwordField.getText());
+
+            if (!firstName.isEmpty() && !lastName.isEmpty() && !newEmail.isEmpty()) {
+                staff.setFirstName(firstName);
+                staff.setLastName(lastName);
+                staff.setEmail(newEmail);
+                staff.setPassword(password);
+                UserUtils.updateUser(staff);
+                updateTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "All fields except password must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -108,28 +270,40 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
-                        "Delete" // Action button text
+                        "Edit/Delete" // Action button text
                 })
                 .toArray(Object[][]::new);
 
         tableModel.setDataVector(data, columnNames);
 
-        // Reapply renderer and editor
-        staffTable.getColumn("Actions").setCellRenderer(new ButtonRenderer("Delete"));
-        staffTable.getColumn("Actions").setCellEditor(new ButtonEditor(new JCheckBox(), "Delete", () -> {
-            int row = staffTable.getSelectedRow();
-            if (row >= 0) {
-                String email = (String) tableModel.getValueAt(row, 2);
-                UserUtils.deleteUser(email);
-                updateTable();
-            }
+        // Set row height for the table
+        staffTable.setRowHeight(100); // Adjust as needed
+
+        // Reapply renderer and editor with vertical button layout
+        staffTable.getColumn("Actions").setCellRenderer(new ButtonRenderer(new String[]{"Edit", "Delete"}));
+        staffTable.getColumn("Actions").setCellEditor(new ButtonEditor(new JCheckBox(), new String[]{"Edit", "Delete"}, new Runnable[]{
+                () -> {
+                    int row = staffTable.getSelectedRow();
+                    if (row >= 0) {
+                        String email = (String) tableModel.getValueAt(row, 2);
+                        editStaff(email);
+                    }
+                },
+                () -> {
+                    int row = staffTable.getSelectedRow();
+                    if (row >= 0) {
+                        String email = (String) tableModel.getValueAt(row, 2);
+                        UserUtils.deleteUser(email);
+                        updateTable();
+                    }
+                }
         }));
     }
 
     public static void open() {
         if (instance == null) {
             instance = new ManageStaffWindow();
-            instance.setVisible(true);
+            WindowUtils.register(instance);
         }
     }
 

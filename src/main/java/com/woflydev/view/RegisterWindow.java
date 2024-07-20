@@ -144,7 +144,7 @@ public class RegisterWindow extends JFrame implements ActionListener {
     public static void open() {
         if (instance == null) {
             instance = new RegisterWindow();
-            instance.setVisible(true);
+            WindowUtils.register(instance);
         }
     }
 

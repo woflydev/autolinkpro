@@ -1,5 +1,6 @@
 package com.woflydev.view;
 
+import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Globals;
 import javax.swing.*;
 import java.awt.*;
@@ -7,18 +8,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import static com.woflydev.model.Globals.PRIVILEGE_STAFF;
 import static com.woflydev.controller.UserUtils.hasPrivilege;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeWindow extends JFrame implements ActionListener {
     public static HomeWindow instance = null;
+    private static List<JFrame> openWindows = new ArrayList<>();
 
     private JButton createBookingButton;
     private JButton manageBookingsButton;
     private JButton settingsButton;
     private JButton adminButton;
+    private JButton logoutButton;
+    private JLabel emailLabel;
 
     public HomeWindow() {
         setTitle("Home");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Change to DISPOSE_ON_CLOSE
         setLayout(new BorderLayout());
 
         // Main panel for buttons
@@ -47,31 +53,37 @@ public class HomeWindow extends JFrame implements ActionListener {
         manageBookingsButton = new JButton("Manage Bookings");
         settingsButton = new JButton("Settings");
         adminButton = new JButton("Admin");
+        logoutButton = new JButton("Logout");
 
         createBookingButton.setPreferredSize(new Dimension(150, 40));
         manageBookingsButton.setPreferredSize(new Dimension(150, 40));
         settingsButton.setPreferredSize(new Dimension(150, 40));
         adminButton.setPreferredSize(new Dimension(150, 40));
+        logoutButton.setPreferredSize(new Dimension(100, 30)); // Smaller logout button
 
         createBookingButton.setBackground(new Color(0, 120, 215));
         manageBookingsButton.setBackground(new Color(0, 120, 215));
         settingsButton.setBackground(new Color(0, 120, 215));
         adminButton.setBackground(new Color(0, 120, 215));
+        logoutButton.setBackground(new Color(255, 69, 58)); // Red color for logout
 
         createBookingButton.setForeground(Color.WHITE);
         manageBookingsButton.setForeground(Color.WHITE);
         settingsButton.setForeground(Color.WHITE);
         adminButton.setForeground(Color.WHITE);
+        logoutButton.setForeground(Color.WHITE);
 
         createBookingButton.setFocusPainted(false);
         manageBookingsButton.setFocusPainted(false);
         settingsButton.setFocusPainted(false);
         adminButton.setFocusPainted(false);
+        logoutButton.setFocusPainted(false);
 
         createBookingButton.addActionListener(this);
         manageBookingsButton.addActionListener(this);
         settingsButton.addActionListener(this);
         adminButton.addActionListener(this);
+        logoutButton.addActionListener(this);
 
         gbc.gridwidth = 1; // Reset gridwidth for buttons
 
@@ -97,8 +109,34 @@ public class HomeWindow extends JFrame implements ActionListener {
 
         add(mainPanel, BorderLayout.CENTER);
 
-        setSize(500, 300);
+        // Footer panel
+        JPanel footerPanel = new JPanel();
+        footerPanel.setBackground(new Color(240, 240, 240)); // Light gray background
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        footerPanel.setLayout(new BorderLayout()); // Use BorderLayout
+
+        emailLabel = new JLabel("Logged in as: " + Globals.CURRENT_USER_EMAIL);
+        emailLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        footerPanel.add(emailLabel, BorderLayout.WEST); // Align email label to the left
+
+        // Adjust logoutButton size and position
+        logoutButton.setPreferredSize(new Dimension(100, 30)); // Smaller button size
+        JPanel logoutPanel = new JPanel();
+        logoutPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        logoutPanel.setOpaque(false);
+        logoutPanel.add(logoutButton); // Add logout button to a panel
+
+        footerPanel.add(logoutPanel, BorderLayout.EAST); // Align logout button to the right
+
+        add(footerPanel, BorderLayout.SOUTH);
+
+        // Set window size and properties
+        setSize(500, 350); // Increased height
         setLocationRelativeTo(null);
+        setResizable(false); // Disable resizing
+
+        // Add this window to the list of open windows
+        openWindows.add(this);
     }
 
     @Override
@@ -111,14 +149,17 @@ public class HomeWindow extends JFrame implements ActionListener {
             System.out.println("Settings button clicked");
         } else if (e.getSource() == adminButton) {
             AdminToolsWindow.open();
+        } else if (e.getSource() == logoutButton) {
+            handleLogout();
         }
     }
 
-
-    public static void open() {
-        if (instance == null) {
-            instance = new HomeWindow();
-            instance.setVisible(true);
+    private void handleLogout() {
+        int response = WindowUtils.confirmationBox("Are you sure you want to log out?");
+        if (response == JOptionPane.YES_OPTION) {
+            Globals.CURRENT_USER_EMAIL = null;
+            WindowUtils.closeAllWindows();
+            LoginWindow.open();
         }
     }
 
@@ -126,5 +167,14 @@ public class HomeWindow extends JFrame implements ActionListener {
     public void dispose() {
         super.dispose();
         instance = null;
+        // Remove this window from the list of open windows
+        openWindows.remove(this);
+    }
+
+    public static void open() {
+        if (instance == null) {
+            instance = new HomeWindow();
+            WindowUtils.register(instance);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.woflydev.controller;
 
 import com.woflydev.controller.hash.BCryptHash;
 import com.woflydev.model.Owner;
+import com.woflydev.model.Staff;
 import com.woflydev.model.User;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +18,12 @@ public class UserUtils {
         FileUtils.initializeSystem(); // Ensure system is initialized
         List<User> users = FileUtils.loadListFromDisk(USER_FILE, User[].class);
         return users != null ? users : new ArrayList<>();
+    }
+
+    public static List<Staff> getStaff() {
+        FileUtils.initializeSystem();
+        List<Staff> staff = FileUtils.loadListFromDisk(USER_FILE, Staff[].class);
+        return staff != null ? staff : new ArrayList<>();
     }
 
     private static Owner getOwner() {
@@ -38,13 +45,11 @@ public class UserUtils {
     }
 
     public static @Nullable User findUserByEmail(String email) {
-        // First, check if the email belongs to the owner
         Owner owner = getOwner();
         if (owner != null && owner.getEmail().equals(email)) {
             return new User(owner.getFirstName(), owner.getLastName(), owner.getEmail(), owner.getPassword(), PRIVILEGE_OWNER);
         }
 
-        // If not the owner, check in the users list
         List<User> users = getUsers();
         for (User user : users) {
             if (user.getEmail().equals(email)) {
@@ -53,6 +58,7 @@ public class UserUtils {
         }
         return null;
     }
+
 
     public static boolean authenticate(String email, String password) {
         // Check if the email belongs to the owner
@@ -77,5 +83,28 @@ public class UserUtils {
         }
         User user = findUserByEmail(email);
         return user != null && user.getPrivilege() <= requiredPrivilege;
+    }
+
+    public static void updateUser(User updatedUser) {
+        List<User> users = getUsers();
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getEmail().equals(updatedUser.getEmail())) {
+                users.set(i, updatedUser);
+                FileUtils.saveToDisk(users, USER_FILE);
+                return;
+            }
+        }
+
+        // If the user to update is the owner, update the owner's details
+        Owner owner = getOwner();
+        if (owner != null && owner.getEmail().equals(updatedUser.getEmail())) {
+            owner.setFirstName(updatedUser.getFirstName());
+            owner.setLastName(updatedUser.getLastName());
+            owner.setEmail(updatedUser.getEmail());
+            owner.setPassword(updatedUser.getPassword());
+            List<Owner> owners = new ArrayList<>();
+            owners.add(owner);
+            FileUtils.saveToDisk(owners, OWNER_FILE);
+        }
     }
 }

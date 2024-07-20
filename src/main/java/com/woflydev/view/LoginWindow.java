@@ -120,7 +120,7 @@ public class LoginWindow extends JFrame implements ActionListener {
         if (instance == null) {
             FileUtils.initializeSystem();
             instance = new LoginWindow();
-            instance.setVisible(true);
+            WindowUtils.register(instance);
         }
     }
 

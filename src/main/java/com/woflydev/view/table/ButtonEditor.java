@@ -1,37 +1,78 @@
 package com.woflydev.view.table;
 
 import javax.swing.*;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.EventObject;
 
-public class ButtonEditor extends DefaultCellEditor {
-    private JButton button;
-    private Runnable onButtonClick;
+public class ButtonEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
+    private final JPanel panel;
+    private final JButton[] buttons;
+    private final Runnable[] actions;
 
-    public ButtonEditor(JCheckBox checkBox, String buttonText, Runnable onButtonClick) {
-        super(checkBox);
-        button = new JButton(buttonText);
-        button.setOpaque(true);
-        this.onButtonClick = onButtonClick;
+    public ButtonEditor(JCheckBox checkBox, String[] labels, Runnable[] actions) {
+        panel = new JPanel(new GridBagLayout());
+        this.buttons = new JButton[labels.length];
+        this.actions = actions;
 
-        button.addActionListener(e -> {
-            if (onButtonClick != null) {
-                onButtonClick.run();
-            }
-            fireEditingStopped(); // Ensure editing stops after action
-        });
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(2, 2, 2, 2);
+
+        for (int i = 0; i < labels.length; i++) {
+            buttons[i] = new JButton(labels[i]);
+            buttons[i].setFont(new Font("Arial", Font.PLAIN, 12));
+            buttons[i].setMargin(new Insets(2, 2, 2, 2));
+            buttons[i].setFocusPainted(false);
+            buttons[i].addActionListener(this);
+            gbc.gridy = i;
+            panel.add(buttons[i], gbc);
+        }
     }
 
     @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        // Ensure the onButtonClick action knows the row index
-        button.setActionCommand(String.valueOf(row));
-        return button;
+        panel.revalidate();
+        panel.repaint();
+        return panel;
     }
 
     @Override
     public Object getCellEditorValue() {
-        return ""; // Return appropriate value if needed
+        return "";
+    }
+
+    @Override
+    public boolean isCellEditable(EventObject anEvent) {
+        return true;
+    }
+
+    @Override
+    public boolean shouldSelectCell(EventObject anEvent) {
+        return true;
+    }
+
+    @Override
+    public boolean stopCellEditing() {
+        fireEditingStopped();
+        return true;
+    }
+
+    @Override
+    public void cancelCellEditing() {
+        fireEditingCanceled();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        for (int i = 0; i < buttons.length; i++) {
+            if (e.getSource() == buttons[i]) {
+                actions[i].run();
+                stopCellEditing();
+            }
+        }
     }
 }

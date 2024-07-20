@@ -2,6 +2,7 @@ package com.woflydev.view;
 
 import com.woflydev.controller.CarUtils;
 import com.woflydev.controller.FileUtils;
+import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Car;
 import com.woflydev.view.table.ButtonEditor;
 import com.woflydev.view.table.ButtonRenderer;
@@ -29,27 +30,55 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
 
         FileUtils.initializeSystem();
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
+        // Main panel for buttons and table
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
 
+        // Heading label
+        JLabel headingLabel = new JLabel("Manage Cars", SwingConstants.CENTER);
+        headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weighty = 0.1; // Allow the heading to occupy some vertical space
+        mainPanel.add(headingLabel, gbc);
+
+        // Add Car button
         addCarButton = new JButton("Add New Car");
+        addCarButton.setPreferredSize(new Dimension(150, 40));
+        addCarButton.setBackground(new Color(0, 120, 215));
+        addCarButton.setForeground(Color.WHITE);
+        addCarButton.setFocusPainted(false);
         addCarButton.addActionListener(this);
-        buttonPanel.add(addCarButton);
-
-        add(buttonPanel, BorderLayout.NORTH);
+        gbc.gridwidth = 1; // Reset gridwidth for button
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weighty = 0.0; // Reset weighty for button
+        mainPanel.add(addCarButton, gbc);
 
         // Initialize tableModel before setting up the table
         String[] columnNames = {"ID", "Make", "Model", "Actions"};
         tableModel = new DefaultTableModel(columnNames, 0);
         carTable = new JTable(tableModel);
         carTable.setCellSelectionEnabled(true);
-
-        // Add the table to the scroll pane
         JScrollPane scrollPane = new JScrollPane(carTable);
-        add(scrollPane, BorderLayout.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.weighty = 1.0; // Allow the table to take up remaining vertical space
+        gbc.fill = GridBagConstraints.BOTH;
+        mainPanel.add(scrollPane, gbc);
 
         // Set initial table data
         updateTable();
+
+        add(mainPanel, BorderLayout.CENTER);
 
         setSize(700, 400);
         setLocationRelativeTo(null);
@@ -111,20 +140,23 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
             tableModel.setDataVector(data, columnNames);
 
             // Reapply renderer and editor
-            carTable.getColumn("Actions").setCellRenderer(new ButtonRenderer("Delete"));
-            carTable.getColumn("Actions").setCellEditor(new ButtonEditor(new JCheckBox(), "Delete", () -> {
-                    int row = carTable.getSelectedRow();
-                    String id = (String) tableModel.getValueAt(row, 0);
-                    CarUtils.deleteCar(id);
-                    updateTable();
-            }));
+            carTable.getColumn("Actions").setCellRenderer(new ButtonRenderer(new String[]{"Edit", "Delete"}));
+            carTable.getColumn("Actions").setCellEditor(
+                new ButtonEditor(new JCheckBox(), new String[]{"Delete",""}, new Runnable[]{
+                        () -> {
+                            int row = carTable.getSelectedRow();
+                            String id = (String) tableModel.getValueAt(row, 0);
+                            CarUtils.deleteCar(id);
+                            updateTable();
+                        }
+                }));
         }
     }
 
     public static void open() {
         if (instance == null) {
             instance = new ManageCarsWindow();
-            instance.setVisible(true);
+            WindowUtils.register(instance);
         }
     }
 

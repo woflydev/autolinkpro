@@ -1,9 +1,12 @@
 package com.woflydev.controller;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class WindowUtils
 {
+    private static final ArrayList<JFrame> openWindows = new ArrayList<>();
+
     public static void infoBox(String infoMessage) {
         JOptionPane.showMessageDialog(
                 null,
@@ -51,5 +54,22 @@ public class WindowUtils
     public static void refreshPanel(JPanel panel) {
         panel.revalidate();
         panel.repaint();
+    }
+
+    public static void closeAllWindows() {
+        for (JFrame window : openWindows) {
+            window.dispose();
+        }
+        openWindows.clear();
+    }
+
+    public static void register(JFrame frame) {
+        if (frame == null) { System.out.println("WARNING! Tried to register a null frame."); return; }
+        if (!openWindows.contains(frame)) {
+            frame.setVisible(true);
+            openWindows.add(frame);
+        } else {
+            System.out.println("WARNING! Window is thought to be opened, or you are calling the open method multiple times.");
+        }
     }
 }
