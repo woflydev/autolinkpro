@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -102,7 +103,13 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         JTextField lastNameField = new JTextField(20);
         JTextField emailField = new JTextField(20);
         JTextField licenseField = new JTextField(20);
-        JTextField dobField = new JTextField(20); // Expecting format YYYY-MM-DDTHH:MM
+        JPasswordField passwordField = new JPasswordField(20);
+
+        SpinnerDateModel dateModel = new SpinnerDateModel();
+        JSpinner dobSpinner = new JSpinner(dateModel);
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd");
+        dobSpinner.setEditor(dateEditor);
+        dobSpinner.setValue(new Date()); // sets the initial value
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -161,15 +168,14 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.EAST;
-        panel.add(new JLabel("Date of Birth (YYYY-MM-DDTHH:MM):"), gbc);
+        panel.add(new JLabel("Date of Birth (YYYY-MM-DD):"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.WEST;
-        panel.add(dobField, gbc);
+        panel.add(dobSpinner, gbc);
 
         // Password
-        JTextField passwordField = new JPasswordField(20);
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.EAST;
@@ -189,18 +195,12 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
             String lastName = lastNameField.getText();
             String email = emailField.getText();
             String license = licenseField.getText();
-            String dobString = dobField.getText();
-            LocalDateTime dob = null;
-            try {
-                dob = LocalDateTime.parse(dobString);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Invalid date format. Please use YYYY-MM-DDTHH:MM.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            String password = BCryptHash.hashString(passwordField.getText());
+            Date dobDate = (Date) dobSpinner.getValue();
+            LocalDate dob = dobDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            String password = BCryptHash.hashString(new String(passwordField.getPassword()));
 
             if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !license.isEmpty() && dob != null && !password.isEmpty()) {
-                Customer newCustomer = new Customer(firstName, lastName, email, password, license, dob);
+                Customer newCustomer = new Customer(firstName, lastName, email, password, license, dob.atStartOfDay());
                 UserUtils.addCustomer(newCustomer);
                 updateTable();
             } else {
@@ -222,11 +222,13 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         JTextField emailField = new JTextField(customer.getEmail(), 20);
         JTextField licenseField = new JTextField(customer.getLicense(), 20);
 
-        JSpinner dobSpinner = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor dobEditor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd'T'HH:mm:ss");
-        dobSpinner.setEditor(dobEditor);
+        SpinnerDateModel dateModel = new SpinnerDateModel();
+        JSpinner dobSpinner = new JSpinner(dateModel);
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd");
+        dobSpinner.setEditor(dateEditor);
+        dobSpinner.setValue(Date.from(customer.getDob().atZone(ZoneId.systemDefault()).toInstant()));
 
-        JTextField passwordField = new JPasswordField(20);
+        JPasswordField passwordField = new JPasswordField(20);
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -285,7 +287,7 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.anchor = GridBagConstraints.EAST;
-        panel.add(new JLabel("Date of Birth:"), gbc);
+        panel.add(new JLabel("Date of Birth (YYYY-MM-DD):"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 4;
@@ -313,16 +315,19 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
             String newEmail = emailField.getText();
             String license = licenseField.getText();
             Date dobDate = (Date) dobSpinner.getValue();
-            LocalDateTime dob = dobDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
-            String password = passwordField.getText().isEmpty() ? customer.getPassword() : BCryptHash.hashString(passwordField.getText());
+            LocalDate dob = dobDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            String password = new String(passwordField.getPassword());
 
             if (!firstName.isEmpty() && !lastName.isEmpty() && !newEmail.isEmpty() && !license.isEmpty() && dob != null) {
                 customer.setFirstName(firstName);
                 customer.setLastName(lastName);
                 customer.setEmail(newEmail);
                 customer.setLicense(license);
-                customer.setDob(dob);
-                customer.setPassword(password);
+                customer.setDob(dob.atStartOfDay());
+
+                if (!password.isEmpty()) {
+                    customer.setPassword(BCryptHash.hashString(password));
+                }
 
                 UserUtils.updateCustomer(customer);
                 updateTable();
