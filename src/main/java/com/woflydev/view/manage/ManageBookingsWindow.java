@@ -9,6 +9,7 @@ import com.woflydev.model.Globals;
 import com.woflydev.view.util.table.ButtonEditor;
 import com.woflydev.view.util.table.ButtonRenderer;
 import com.woflydev.view.util.table.DateTimeCellRenderer;
+import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,8 +23,8 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
     public static ManageBookingsWindow instance = null;
 
     private JTable bookingTable;
-    private DefaultTableModel tableModel;
-    private TableRowSorter<DefaultTableModel> rowSorter;
+    private NonEditableTableModel tableModel;
+    private TableRowSorter<NonEditableTableModel> rowSorter;
 
     private String[] columnNames = {"ID", "Car Make", "Car Model", "Driver", "Start Date", "End Date", "Actions"};
 
@@ -31,6 +32,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
         setTitle("Manage Bookings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
+        setResizable(false);
 
         FileUtils.initializeSystem();
 
@@ -42,7 +44,6 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // Heading label
         JLabel headingLabel = new JLabel("Manage Bookings", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
         headingLabel.setForeground(new Color(0, 120, 215));
@@ -52,7 +53,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
         gbc.weighty = 0.1;
         mainPanel.add(headingLabel, gbc);
 
-        tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new NonEditableTableModel(columnNames, 0);
         bookingTable = new JTable(tableModel);
         bookingTable.setCellSelectionEnabled(true);
         rowSorter = new TableRowSorter<>(tableModel);
@@ -69,17 +70,13 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
 
         add(mainPanel, BorderLayout.CENTER);
 
-        setSize(800, 400); // Adjust size to accommodate new columns
+        setSize(800, 400);
         setLocationRelativeTo(null);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // No action needed for removed button
-    }
-
-    private void addNewBooking() {
-        // Implementation not needed as button is removed
+        // intellij keeps yelling at me if i remove this
     }
 
     private void editBooking(String bookingId) {
@@ -98,9 +95,9 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
                 data[i][1] = booking.getCar().getMake();
                 data[i][2] = booking.getCar().getModel();
                 data[i][3] = booking.getDriverFullName();
-                data[i][4] = booking.getStartDateTime();
-                data[i][5] = booking.getEndDateTime();
-                data[i][6] = Globals.CURRENT_PRIVILEGE <= Globals.PRIVILEGE_STAFF ? "Edit/Delete" : "";
+                data[i][4] = booking.getStart();
+                data[i][5] = booking.getEnd();
+                data[i][6] = UserUtils.hasPrivilege(Globals.CURRENT_USER_EMAIL, Globals.PRIVILEGE_STAFF) ? "Edit/Delete" : "";
             }
         } else {
             List<Booking> customerBookings = bookings.stream()
@@ -114,8 +111,8 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
                 data[i][1] = booking.getCar().getMake();
                 data[i][2] = booking.getCar().getModel();
                 data[i][3] = booking.getDriverFullName();
-                data[i][4] = booking.getStartDateTime();
-                data[i][5] = booking.getEndDateTime();
+                data[i][4] = booking.getStart();
+                data[i][5] = booking.getEnd();
                 data[i][6] = "";
             }
         }

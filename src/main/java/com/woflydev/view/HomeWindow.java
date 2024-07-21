@@ -28,10 +28,9 @@ public class HomeWindow extends JFrame implements ActionListener {
 
     public HomeWindow() {
         setTitle("Home");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Change to DISPOSE_ON_CLOSE
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Main panel for buttons
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.setBackground(Color.WHITE);
@@ -42,17 +41,15 @@ public class HomeWindow extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // Heading label
         JLabel headingLabel = new JLabel("Home", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
+        headingLabel.setForeground(new Color(0, 120, 215));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        gbc.weighty = 0.1; // Allow the heading to occupy some vertical space
+        gbc.weighty = 0.1;
         mainPanel.add(headingLabel, gbc);
 
-        // Create buttons
         createBookingButton = new JButton("Create Booking");
         manageBookingsButton = new JButton("Manage Bookings");
         settingsButton = new JButton("Settings");
@@ -89,11 +86,11 @@ public class HomeWindow extends JFrame implements ActionListener {
         adminButton.addActionListener(this);
         logoutButton.addActionListener(this);
 
-        gbc.gridwidth = 1; // Reset gridwidth for buttons
+        gbc.gridwidth = 1;
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.weighty = 0.0; // Reset weighty for buttons
+        gbc.weighty = 0.0;
         mainPanel.add(createBookingButton, gbc);
 
         gbc.gridx = 1;
@@ -113,33 +110,29 @@ public class HomeWindow extends JFrame implements ActionListener {
 
         add(mainPanel, BorderLayout.CENTER);
 
-        // Footer panel
         JPanel footerPanel = new JPanel();
-        footerPanel.setBackground(new Color(240, 240, 240)); // Light gray background
+        footerPanel.setBackground(new Color(240, 240, 240));
         footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        footerPanel.setLayout(new BorderLayout()); // Use BorderLayout
+        footerPanel.setLayout(new BorderLayout());
 
         emailLabel = new JLabel("Logged in as: " + Globals.CURRENT_USER_EMAIL);
         emailLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        footerPanel.add(emailLabel, BorderLayout.WEST); // Align email label to the left
+        footerPanel.add(emailLabel, BorderLayout.WEST);
 
-        // Adjust logoutButton size and position
-        logoutButton.setPreferredSize(new Dimension(100, 30)); // Smaller button size
+        logoutButton.setPreferredSize(new Dimension(100, 30));
         JPanel logoutPanel = new JPanel();
         logoutPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         logoutPanel.setOpaque(false);
-        logoutPanel.add(logoutButton); // Add logout button to a panel
+        logoutPanel.add(logoutButton);
 
-        footerPanel.add(logoutPanel, BorderLayout.EAST); // Align logout button to the right
+        footerPanel.add(logoutPanel, BorderLayout.EAST);
 
         add(footerPanel, BorderLayout.SOUTH);
 
-        // Set window size and properties
-        setSize(500, 350); // Increased height
+        setSize(500, 350);
         setLocationRelativeTo(null);
-        setResizable(false); // Disable resizing
+        setResizable(false);
 
-        // Add this window to the list of open windows
         openWindows.add(this);
     }
 
@@ -171,7 +164,6 @@ public class HomeWindow extends JFrame implements ActionListener {
     public void dispose() {
         super.dispose();
         instance = null;
-        // Remove this window from the list of open windows
         openWindows.remove(this);
     }
 

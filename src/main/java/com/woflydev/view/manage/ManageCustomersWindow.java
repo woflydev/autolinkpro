@@ -7,6 +7,7 @@ import com.woflydev.model.entity.Customer;
 import com.woflydev.model.Globals;
 import com.woflydev.view.util.table.ButtonEditor;
 import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -23,7 +24,7 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
 
     private JButton addCustomerButton;
     private JTable customerTable;
-    private DefaultTableModel tableModel;
+    private NonEditableTableModel tableModel;
 
     public ManageCustomersWindow() {
         setTitle("Manage Customers");
@@ -64,7 +65,7 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
 
         // Initialize tableModel before setting up the table
         String[] columnNames = {"First Name", "Last Name", "Email", "License", "Date of Birth", "Actions"};
-        tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new NonEditableTableModel(columnNames, 0);
         customerTable = new JTable(tableModel);
         customerTable.setCellSelectionEnabled(true);
         customerTable.setAutoCreateRowSorter(true);

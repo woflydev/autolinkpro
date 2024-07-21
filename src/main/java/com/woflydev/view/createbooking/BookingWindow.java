@@ -6,6 +6,7 @@ import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.obj.Car;
 import com.woflydev.view.util.table.ButtonEditor;
 import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -19,10 +20,10 @@ public class BookingWindow extends JFrame implements ActionListener {
     public static BookingWindow instance = null;
 
     private JTable carTable;
-    private DefaultTableModel tableModel;
+    private NonEditableTableModel tableModel;
     private JTextField searchField;
     private JComboBox<String> filterCombo;
-    private TableRowSorter<DefaultTableModel> rowSorter;
+    private TableRowSorter<NonEditableTableModel> rowSorter;
 
     public BookingWindow() {
         setTitle("New Booking");
@@ -69,7 +70,7 @@ public class BookingWindow extends JFrame implements ActionListener {
         mainPanel.add(searchPanel, gbc);
 
         String[] columnNames = {"ID", "Make", "Model", "Actions"};
-        tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new NonEditableTableModel(columnNames, 0);
         carTable = new JTable(tableModel);
         carTable.setCellSelectionEnabled(true);
         rowSorter = new TableRowSorter<>(tableModel);

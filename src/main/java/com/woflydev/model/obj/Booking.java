@@ -70,7 +70,7 @@ public class Booking {
         this.driverEmail = driverEmail;
     }
 
-    public LocalDateTime getStartDateTime() {
+    public LocalDateTime getStart() {
         return startDateTime;
     }
 
@@ -78,7 +78,7 @@ public class Booking {
         this.startDateTime = startDateTime;
     }
 
-    public LocalDateTime getEndDateTime() {
+    public LocalDateTime getEnd() {
         return endDateTime;
     }
 

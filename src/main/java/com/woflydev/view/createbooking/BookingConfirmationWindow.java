@@ -40,8 +40,8 @@ public class BookingConfirmationWindow extends JFrame {
         JLabel carInfoLabel = new JLabel("Car Details: " + booking.getCar().getMake() + " " + booking.getCar().getModel());
         JLabel customerNameLabel = new JLabel("Driver Name: " + booking.getDriverFullName());
         JLabel customerEmailLabel = new JLabel("Driver Email: " + booking.getDriverEmail());
-        JLabel startDateTimeLabel = new JLabel("Start Date & Time: " + booking.getStartDateTime().format(dateTimeFormatter));
-        JLabel endDateTimeLabel = new JLabel("End Date & Time: " + booking.getEndDateTime().format(dateTimeFormatter));
+        JLabel startDateTimeLabel = new JLabel("Start Date & Time: " + booking.getStart().format(dateTimeFormatter));
+        JLabel endDateTimeLabel = new JLabel("End Date & Time: " + booking.getEnd().format(dateTimeFormatter));
         JLabel paymentMethodLabel = new JLabel("Payment Method: " + booking.getPaymentMethod());
 
         gbc.gridwidth = 1;

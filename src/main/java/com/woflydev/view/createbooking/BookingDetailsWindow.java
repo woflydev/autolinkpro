@@ -19,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.UUID;
 
 import static com.woflydev.model.Globals.CURRENT_USER_EMAIL;
@@ -169,15 +171,41 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         LocalTime endTime = endTimePicker.getTime();
         PaymentMethod paymentMethod = (PaymentMethod) paymentMethodComboBox.getSelectedItem();
 
-        if (!BookingUtils.userCanMakeBooking()) { WindowUtils.errorBox("You can only make a maximum of " + Config.MAX_CONCURRENT_BOOKINGS + " concurrent bookings."); return; }
-        if (driverName.isEmpty() || driverEmail.isEmpty() || startDate == null || startTime == null || endDate == null || endTime == null || paymentMethod == null) { WindowUtils.errorBox("All fields must be filled out."); return; }
+        if (!BookingUtils.hasExceededMaximumBookings()) {
+            WindowUtils.errorBox("You can only make a maximum of " + Config.MAX_CONCURRENT_BOOKINGS + " concurrent bookings.");
+            return;
+        }
+        if (driverName.isEmpty() || driverEmail.isEmpty() || startDate == null || startTime == null || endDate == null || endTime == null || paymentMethod == null) {
+            WindowUtils.errorBox("All fields must be filled out.");
+            return;
+        }
 
         LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
         LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
         LocalDateTime minThresh = LocalDateTime.now().plusHours(1);
 
-        if (endDateTime.isBefore(startDateTime)) { WindowUtils.errorBox("You can't rent a car for negative time!"); return; }
-        if (startDateTime.isBefore(minThresh)) { WindowUtils.errorBox("Start time must be at least an hour after now."); return; }
+        if (endDateTime.isBefore(startDateTime)) {
+            WindowUtils.errorBox("You can't rent a car for negative time!");
+            return;
+        }
+        if (startDateTime.isBefore(minThresh)) {
+            WindowUtils.errorBox("Start time must be at least an hour after now.");
+            return;
+        }
+
+        if (BookingUtils.hasClash(carId, startDateTime, endDateTime)) {
+            LocalDateTime next = BookingUtils.nextAvailable(carId, endDateTime);
+            String date = next.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String time = next.format(DateTimeFormatter.ofPattern("HH:mm"));
+            String errorMessage = String.format(
+                    """
+                            This car is already booked during the selected time period.
+                            The next available time is: %s, at %s."""
+                    , date, time
+            );
+            WindowUtils.errorBox(errorMessage);
+            return;
+        }
 
         Booking newBooking = new Booking(
                 UUID.randomUUID().toString(),

@@ -6,6 +6,7 @@ import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.obj.Car;
 import com.woflydev.view.util.table.ButtonEditor;
 import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,7 +21,7 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
 
     private JButton addCarButton;
     private JTable carTable;
-    private DefaultTableModel tableModel;
+    private NonEditableTableModel tableModel;
 
     public ManageCarsWindow() {
         setTitle("Manage Cars");
@@ -63,7 +64,7 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
 
         // Initialize tableModel before setting up the table
         String[] columnNames = {"ID", "Make", "Model", "Actions"};
-        tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new NonEditableTableModel(columnNames, 0);
         carTable = new JTable(tableModel);
         carTable.setCellSelectionEnabled(true);
         JScrollPane scrollPane = new JScrollPane(carTable);

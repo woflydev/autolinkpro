@@ -7,6 +7,7 @@ import com.woflydev.model.Globals;
 import com.woflydev.model.entity.Staff;
 import com.woflydev.view.util.table.ButtonEditor;
 import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,7 +21,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
 
     private JButton addStaffButton;
     private JTable staffTable;
-    private DefaultTableModel tableModel;
+    private NonEditableTableModel tableModel;
 
     public ManageStaffWindow() {
         setTitle("Manage Staff");
@@ -61,7 +62,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
 
         // Initialize tableModel before setting up the table
         String[] columnNames = {"First Name", "Last Name", "Email", "Actions"};
-        tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new NonEditableTableModel(columnNames, 0);
         staffTable = new JTable(tableModel);
         staffTable.setCellSelectionEnabled(true);
         staffTable.setAutoCreateRowSorter(true);
