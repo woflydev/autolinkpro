@@ -1,10 +1,12 @@
 package com.woflydev.controller;
 
 import com.woflydev.controller.hash.BCryptHash;
-import com.woflydev.model.*;
+import com.woflydev.model.entity.Customer;
+import com.woflydev.model.entity.Owner;
+import com.woflydev.model.entity.Staff;
+import com.woflydev.model.entity.User;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.woflydev.controller.FileUtils.*;

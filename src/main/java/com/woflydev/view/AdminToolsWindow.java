@@ -1,6 +1,9 @@
 package com.woflydev.view;
 
 import com.woflydev.controller.WindowUtils;
+import com.woflydev.view.manage.ManageCarsWindow;
+import com.woflydev.view.manage.ManageCustomersWindow;
+import com.woflydev.view.manage.ManageStaffWindow;
 
 import javax.swing.*;
 import java.awt.*;

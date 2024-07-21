@@ -1,4 +1,4 @@
-package com.woflydev.model;
+package com.woflydev.model.entity;
 
 public class User {
     private String firstName;

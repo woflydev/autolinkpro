@@ -1,4 +1,6 @@
-package com.woflydev.model;
+package com.woflydev.model.entity;
+
+import com.woflydev.model.Globals;
 
 import java.time.LocalDateTime;
 

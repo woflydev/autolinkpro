@@ -1,4 +1,4 @@
-package com.woflydev.model;
+package com.woflydev.model.obj;
 
 public class Car {
     private String id;

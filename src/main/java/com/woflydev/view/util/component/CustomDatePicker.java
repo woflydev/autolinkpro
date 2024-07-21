@@ -1,4 +1,4 @@
-package com.woflydev.view.component;
+package com.woflydev.view.util.component;
 
 import com.github.lgooddatepicker.components.DatePicker;
 

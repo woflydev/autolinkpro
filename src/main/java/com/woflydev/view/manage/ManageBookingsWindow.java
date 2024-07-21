@@ -1,14 +1,14 @@
-package com.woflydev.view;
+package com.woflydev.view.manage;
 
 import com.woflydev.controller.BookingUtils;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
-import com.woflydev.model.Booking;
+import com.woflydev.model.obj.Booking;
 import com.woflydev.model.Globals;
-import com.woflydev.view.table.ButtonEditor;
-import com.woflydev.view.table.ButtonRenderer;
-import com.woflydev.view.table.DateTimeCellRenderer;
+import com.woflydev.view.util.table.ButtonEditor;
+import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.DateTimeCellRenderer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

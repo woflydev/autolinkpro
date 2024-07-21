@@ -1,7 +1,7 @@
-package com.woflydev.view;
+package com.woflydev.view.createbooking;
 
 import com.woflydev.controller.WindowUtils;
-import com.woflydev.model.Booking;
+import com.woflydev.model.obj.Booking;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package com.woflydev.model;
+package com.woflydev.model.obj;
 
 import com.woflydev.controller.CarUtils;
 import com.woflydev.model.enums.PaymentMethod;

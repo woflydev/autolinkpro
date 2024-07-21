@@ -5,20 +5,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.woflydev.controller.adapter.LocalDateTimeAdapter;
 import com.woflydev.controller.hash.BCryptHash;
-import com.woflydev.model.Car;
-import com.woflydev.model.Globals;
-import com.woflydev.model.Owner;
-import com.woflydev.model.User;
+import com.woflydev.model.obj.Car;
+import com.woflydev.model.entity.Owner;
+import com.woflydev.model.entity.User;
 
 import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.woflydev.model.Config.*;
-import static com.woflydev.model.Globals.*;
 
 public class FileUtils {
 

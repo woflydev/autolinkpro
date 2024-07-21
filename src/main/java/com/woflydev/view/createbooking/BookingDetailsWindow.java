@@ -1,16 +1,15 @@
-package com.woflydev.view;
+package com.woflydev.view.createbooking;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import com.woflydev.controller.BookingUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
-import com.woflydev.view.component.CustomDatePicker;
-import com.woflydev.view.component.CustomTimePicker;
-import com.woflydev.model.Booking;
+import com.woflydev.view.util.component.CustomDatePicker;
+import com.woflydev.view.util.component.CustomTimePicker;
+import com.woflydev.model.obj.Booking;
 import com.woflydev.model.Config;
-import com.woflydev.model.Globals;
-import com.woflydev.model.User;
+import com.woflydev.model.entity.User;
 import com.woflydev.model.enums.PaymentMethod;
 
 import javax.swing.*;

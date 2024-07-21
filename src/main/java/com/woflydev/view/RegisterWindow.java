@@ -7,8 +7,8 @@ import java.awt.event.ActionListener;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
-import com.woflydev.model.Customer;
-import com.woflydev.model.User;
+import com.woflydev.model.entity.Customer;
+import com.woflydev.model.entity.User;
 import com.woflydev.controller.hash.BCryptHash;
 
 import java.time.LocalDateTime;

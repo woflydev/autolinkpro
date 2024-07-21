@@ -1,11 +1,11 @@
-package com.woflydev.view;
+package com.woflydev.view.createbooking;
 
 import com.woflydev.controller.CarUtils;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.WindowUtils;
-import com.woflydev.model.Car;
-import com.woflydev.view.table.ButtonEditor;
-import com.woflydev.view.table.ButtonRenderer;
+import com.woflydev.model.obj.Car;
+import com.woflydev.view.util.table.ButtonEditor;
+import com.woflydev.view.util.table.ButtonRenderer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

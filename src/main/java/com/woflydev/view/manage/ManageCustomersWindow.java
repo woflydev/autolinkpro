@@ -1,29 +1,32 @@
-package com.woflydev.view;
+package com.woflydev.view.manage;
 
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.controller.hash.BCryptHash;
+import com.woflydev.model.entity.Customer;
 import com.woflydev.model.Globals;
-import com.woflydev.model.Staff;
-import com.woflydev.view.table.ButtonEditor;
-import com.woflydev.view.table.ButtonRenderer;
+import com.woflydev.view.util.table.ButtonEditor;
+import com.woflydev.view.util.table.ButtonRenderer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
-public class ManageStaffWindow extends JFrame implements ActionListener {
-    public static ManageStaffWindow instance = null;
+public class ManageCustomersWindow extends JFrame implements ActionListener {
+    public static ManageCustomersWindow instance = null;
 
-    private JButton addStaffButton;
-    private JTable staffTable;
+    private JButton addCustomerButton;
+    private JTable customerTable;
     private DefaultTableModel tableModel;
 
-    public ManageStaffWindow() {
-        setTitle("Manage Staff");
+    public ManageCustomersWindow() {
+        setTitle("Manage Customers");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -37,7 +40,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         gbc.weightx = 1.0;
 
         // Heading label
-        JLabel headingLabel = new JLabel("Manage Staff", SwingConstants.CENTER);
+        JLabel headingLabel = new JLabel("Manage Customers", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
         headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
         gbc.gridx = 0;
@@ -46,29 +49,29 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         gbc.weighty = 0.1; // Allow the heading to occupy some vertical space
         mainPanel.add(headingLabel, gbc);
 
-        // Add Staff button
-        addStaffButton = new JButton("Add New Staff");
-        addStaffButton.setPreferredSize(new Dimension(150, 40));
-        addStaffButton.setBackground(new Color(0, 120, 215));
-        addStaffButton.setForeground(Color.WHITE);
-        addStaffButton.setFocusPainted(false);
-        addStaffButton.addActionListener(this);
+        // Add Customer button
+        addCustomerButton = new JButton("Add New Customer");
+        addCustomerButton.setPreferredSize(new Dimension(150, 40));
+        addCustomerButton.setBackground(new Color(0, 120, 215));
+        addCustomerButton.setForeground(Color.WHITE);
+        addCustomerButton.setFocusPainted(false);
+        addCustomerButton.addActionListener(this);
         gbc.gridwidth = 1; // Reset gridwidth for button
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weighty = 0.0; // Reset weighty for button
-        mainPanel.add(addStaffButton, gbc);
+        mainPanel.add(addCustomerButton, gbc);
 
         // Initialize tableModel before setting up the table
-        String[] columnNames = {"First Name", "Last Name", "Email", "Actions"};
+        String[] columnNames = {"First Name", "Last Name", "Email", "License", "Date of Birth", "Actions"};
         tableModel = new DefaultTableModel(columnNames, 0);
-        staffTable = new JTable(tableModel);
-        staffTable.setCellSelectionEnabled(true);
-        staffTable.setAutoCreateRowSorter(true);
-        staffTable.setFillsViewportHeight(true);
+        customerTable = new JTable(tableModel);
+        customerTable.setCellSelectionEnabled(true);
+        customerTable.setAutoCreateRowSorter(true);
+        customerTable.setFillsViewportHeight(true);
 
         // Add the table to the scroll pane
-        JScrollPane scrollPane = new JScrollPane(staffTable);
+        JScrollPane scrollPane = new JScrollPane(customerTable);
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
@@ -78,7 +81,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
 
         add(mainPanel, BorderLayout.CENTER);
 
-        setSize(700, 400);
+        setSize(800, 400);
         setLocationRelativeTo(null);
 
         // Set initial table data
@@ -87,16 +90,23 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == addStaffButton) {
-            addNewStaff();
+        if (e.getSource() == addCustomerButton) {
+            addNewCustomer();
         }
     }
 
-    private void addNewStaff() {
+    private void addNewCustomer() {
         JTextField firstNameField = new JTextField(20);
         JTextField lastNameField = new JTextField(20);
         JTextField emailField = new JTextField(20);
-        JTextField passwordField = new JPasswordField(20);
+        JTextField licenseField = new JTextField(20);
+        JPasswordField passwordField = new JPasswordField(20);
+
+        SpinnerDateModel dateModel = new SpinnerDateModel();
+        JSpinner dobSpinner = new JSpinner(dateModel);
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd");
+        dobSpinner.setEditor(dateEditor);
+        dobSpinner.setValue(new Date()); // sets the initial value
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -140,30 +150,55 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(emailField, gbc);
 
-        // Password
+        // License
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.EAST;
-        panel.add(new JLabel("Password:"), gbc);
+        panel.add(new JLabel("License:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.WEST;
+        panel.add(licenseField, gbc);
+
+        // Date of Birth
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Date of Birth (YYYY-MM-DD):"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(dobSpinner, gbc);
+
+        // Password
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Password:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.WEST;
         panel.add(passwordField, gbc);
 
         int result = JOptionPane.showConfirmDialog(null, panel,
-                "Enter new staff details", JOptionPane.OK_CANCEL_OPTION,
+                "Enter new customer details", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String email = emailField.getText();
-            String password = BCryptHash.hashString(passwordField.getText());
+            String license = licenseField.getText();
+            Date dobDate = (Date) dobSpinner.getValue();
+            LocalDate dob = dobDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            String password = BCryptHash.hashString(new String(passwordField.getPassword()));
 
-            if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-                Staff newStaff = new Staff(firstName, lastName, email, password);
-                UserUtils.addStaff(newStaff);
+            if (!firstName.isEmpty() && !lastName.isEmpty() && !email.isEmpty() && !license.isEmpty() && dob != null && !password.isEmpty()) {
+                Customer newCustomer = new Customer(firstName, lastName, email, password, license, dob.atStartOfDay());
+                UserUtils.addCustomer(newCustomer);
                 updateTable();
             } else {
                 JOptionPane.showMessageDialog(null, "All fields must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -171,18 +206,26 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         }
     }
 
-    private void editStaff(String email) {
-        Staff staff = UserUtils.getStaffByEmail(email);
+    private void editCustomer(String email) {
+        Customer customer = UserUtils.getCustomerByEmail(email);
 
-        if (staff == null || staff.getPrivilege() > Globals.PRIVILEGE_STAFF) {
-            JOptionPane.showMessageDialog(null, "Staff not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        if (customer == null || customer.getPrivilege() != Globals.PRIVILEGE_CUSTOMER) {
+            JOptionPane.showMessageDialog(null, "Customer not found.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        JTextField firstNameField = new JTextField(staff.getFirstName(), 20);
-        JTextField lastNameField = new JTextField(staff.getLastName(), 20);
-        JTextField emailField = new JTextField(staff.getEmail(), 20);
-        JTextField passwordField = new JPasswordField(20);
+        JTextField firstNameField = new JTextField(customer.getFirstName(), 20);
+        JTextField lastNameField = new JTextField(customer.getLastName(), 20);
+        JTextField emailField = new JTextField(customer.getEmail(), 20);
+        JTextField licenseField = new JTextField(customer.getLicense(), 20);
+
+        SpinnerDateModel dateModel = new SpinnerDateModel();
+        JSpinner dobSpinner = new JSpinner(dateModel);
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd");
+        dobSpinner.setEditor(dateEditor);
+        dobSpinner.setValue(Date.from(customer.getDob().atZone(ZoneId.systemDefault()).toInstant()));
+
+        JPasswordField passwordField = new JPasswordField(20);
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -226,33 +269,64 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(emailField, gbc);
 
-        // Password
+        // License
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.EAST;
-        panel.add(new JLabel("Password:"), gbc);
+        panel.add(new JLabel("License:"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.WEST;
+        panel.add(licenseField, gbc);
+
+        // Date of Birth
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Date of Birth (YYYY-MM-DD):"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(dobSpinner, gbc);
+
+        // Password
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(new JLabel("Password:"), gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.WEST;
         panel.add(passwordField, gbc);
 
         int result = JOptionPane.showConfirmDialog(null, panel,
-                "Edit staff details", JOptionPane.OK_CANCEL_OPTION,
+                "Edit customer details", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String newEmail = emailField.getText();
-            String password = passwordField.getText().isEmpty() ? staff.getPassword() : BCryptHash.hashString(passwordField.getText());
+            String license = licenseField.getText();
+            Date dobDate = (Date) dobSpinner.getValue();
+            LocalDate dob = dobDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            String password = new String(passwordField.getPassword());
 
-            if (!firstName.isEmpty() && !lastName.isEmpty() && !newEmail.isEmpty()) {
-                staff.setFirstName(firstName);
-                staff.setLastName(lastName);
-                staff.setEmail(newEmail);
-                staff.setPassword(password);
-                UserUtils.updateStaff(staff);
+            if (!firstName.isEmpty() && !lastName.isEmpty() && !newEmail.isEmpty() && !license.isEmpty() && dob != null) {
+                customer.setFirstName(firstName);
+                customer.setLastName(lastName);
+                customer.setEmail(newEmail);
+                customer.setLicense(license);
+                customer.setDob(dob.atStartOfDay());
+
+                if (!password.isEmpty()) {
+                    customer.setPassword(BCryptHash.hashString(password));
+                }
+
+                UserUtils.updateCustomer(customer);
                 updateTable();
             } else {
                 JOptionPane.showMessageDialog(null, "All fields except password must be filled.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -261,32 +335,37 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
     }
 
     private void updateTable() {
-        List<Staff> users = UserUtils.getStaffList();
-        String[] columnNames = {"First Name", "Last Name", "Email", "Actions"};
+        List<Customer> users = UserUtils.getCustomerList();
+        String[] columnNames = {"First Name", "Last Name", "Email", "License", "Date of Birth", "Actions"};
         Object[][] data = users.stream()
-                .filter(user -> user.getPrivilege() == Globals.PRIVILEGE_STAFF)
-                .map(user -> new Object[]{
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getEmail(),
-                        "Edit/Delete"
+                .filter(user -> user.getPrivilege() == Globals.PRIVILEGE_CUSTOMER)
+                .map(user -> {
+                    Customer customer = (Customer) user;
+                    return new Object[]{
+                            customer.getFirstName(),
+                            customer.getLastName(),
+                            customer.getEmail(),
+                            customer.getLicense(),
+                            customer.getDob().toString(),
+                            "Edit/Delete"
+                    };
                 })
                 .toArray(Object[][]::new);
 
         tableModel.setDataVector(data, columnNames);
 
-        staffTable.setRowHeight(75);
-        staffTable.getColumn("Actions").setCellRenderer(new ButtonRenderer(new String[]{"Edit", "Delete"}));
-        staffTable.getColumn("Actions").setCellEditor(new ButtonEditor(new JCheckBox(), new String[]{"Edit", "Delete"}, new Runnable[]{
+        customerTable.setRowHeight(75);
+        customerTable.getColumn("Actions").setCellRenderer(new ButtonRenderer(new String[]{"Edit", "Delete"}));
+        customerTable.getColumn("Actions").setCellEditor(new ButtonEditor(new JCheckBox(), new String[]{"Edit", "Delete"}, new Runnable[]{
                 () -> {
-                    int row = staffTable.getSelectedRow();
+                    int row = customerTable.getSelectedRow();
                     if (row >= 0) {
                         String email = (String) tableModel.getValueAt(row, 2);
-                        editStaff(email);
+                        editCustomer(email);
                     }
                 },
                 () -> {
-                    int row = staffTable.getSelectedRow();
+                    int row = customerTable.getSelectedRow();
                     if (row >= 0) {
                         String email = (String) tableModel.getValueAt(row, 2);
                         UserUtils.deleteCustomer(email);
@@ -298,7 +377,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
 
     public static void open() {
         if (instance == null) {
-            instance = new ManageStaffWindow();
+            instance = new ManageCustomersWindow();
             WindowUtils.register(instance);
         }
     }

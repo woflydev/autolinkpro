@@ -1,6 +1,6 @@
 package com.woflydev.controller;
 
-import com.woflydev.model.Booking;
+import com.woflydev.model.obj.Booking;
 
 import static com.woflydev.model.Globals.*;
 import static com.woflydev.model.Config.*;

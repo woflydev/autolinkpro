@@ -1,6 +1,6 @@
 package com.woflydev.controller;
 
-import com.woflydev.model.Car;
+import com.woflydev.model.obj.Car;
 
 import java.util.List;
 

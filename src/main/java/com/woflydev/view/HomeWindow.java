@@ -2,6 +2,9 @@ package com.woflydev.view;
 
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Globals;
+import com.woflydev.view.createbooking.BookingWindow;
+import com.woflydev.view.manage.ManageBookingsWindow;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

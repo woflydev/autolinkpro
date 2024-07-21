@@ -1,16 +1,14 @@
-package com.woflydev.view;
+package com.woflydev.view.manage;
 
 import com.woflydev.controller.CarUtils;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.WindowUtils;
-import com.woflydev.model.Car;
-import com.woflydev.model.Globals;
-import com.woflydev.view.table.ButtonEditor;
-import com.woflydev.view.table.ButtonRenderer;
+import com.woflydev.model.obj.Car;
+import com.woflydev.view.util.table.ButtonEditor;
+import com.woflydev.view.util.table.ButtonRenderer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
