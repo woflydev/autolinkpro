@@ -1,15 +1,28 @@
 package com.woflydev.view.util.component;
 
-import com.github.lgooddatepicker.components.DatePicker;
+import raven.datetime.component.date.DatePicker;
 
+import javax.swing.*;
 import java.time.LocalDate;
 
-public class CustomDatePicker {
-    public static DatePicker create() {
+public class CustomDatePicker extends DatePicker {
+    /**
+     * Creates a JFormattedTextField, attaches the DatePicker, and applies DatePicker defaults.
+     * @return JFormattedTextField on which the DatePicker has been attached.
+     */
+    public JFormattedTextField create() {
         DatePicker dp = new DatePicker();
+        JFormattedTextField ftf = new JFormattedTextField();
+        dp.setEditor(ftf);
 
-        dp.setDate(LocalDate.now());
+        dp.setSelectedDate(LocalDate.now());
+        dp.setDateSelectionMode(DatePicker.DateSelectionMode.SINGLE_DATE_SELECTED);
+        dp.setDateSelectionAble(localDate -> !localDate.isBefore(LocalDate.now()));
 
-        return dp;
+        return ftf;
+    }
+
+    public LocalDate getDate() {
+        return getSelectedDate();
     }
 }

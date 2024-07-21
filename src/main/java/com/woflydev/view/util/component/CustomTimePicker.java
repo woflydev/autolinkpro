@@ -1,37 +1,32 @@
 package com.woflydev.view.util.component;
 
-import com.github.lgooddatepicker.components.TimePicker;
-import com.github.lgooddatepicker.components.TimePickerSettings;
+import raven.datetime.component.time.TimePicker;
+
+import javax.swing.*;
 import java.time.LocalTime;
 
-public class CustomTimePicker {
+import static javax.swing.SwingConstants.HORIZONTAL;
 
-    public static TimePicker create() {
-        TimePickerSettings settings = new TimePickerSettings();
+public class CustomTimePicker extends TimePicker {
+    /**
+     * Creates a JFormattedTextField, attaches the TimePicker, and applies TimePicker defaults.
+     * @return A JFormattedTextField on which the TimePicker has been attached.
+     */
+    public JFormattedTextField create() {
+        LocalTime defaultTime = LocalTime.now().withSecond(0).withNano(0).plusMinutes(65);
 
-        settings.setFormatForDisplayTime("HH:mm");
-        settings.setFormatForMenuTimes("HH:mm");
-        settings.generatePotentialMenuTimes(TimePickerSettings.TimeIncrement.FifteenMinutes, null, null);
+        TimePicker tp = new TimePicker();
+        JFormattedTextField ftf = new JFormattedTextField();
+        tp.setEditor(ftf);
 
-        LocalTime defaultTime = roundToNearest15Minutes(LocalTime.now().withSecond(0).withNano(0).plusHours(1));
-        TimePicker timePicker = new TimePicker(settings);
+        tp.setOrientation(HORIZONTAL);
+        tp.setSelectedTime(defaultTime);
+        tp.set24HourView(true);
 
-        timePicker.setTime(defaultTime);
-
-        timePicker.addTimeChangeListener(event -> {
-            LocalTime newTime = event.getNewTime();
-            LocalTime adjustedTime = roundToNearest15Minutes(newTime);
-            if (!newTime.equals(adjustedTime)) {
-                timePicker.setTime(adjustedTime);
-            }
-        });
-
-        return timePicker;
+        return ftf;
     }
 
-    private static LocalTime roundToNearest15Minutes(LocalTime time) {
-        int minutes = time.getMinute();
-        int roundedMinutes = (minutes / 15) * 15;
-        return LocalTime.of(time.getHour(), roundedMinutes);
+    public LocalTime getTime() {
+        return getSelectedTime();
     }
 }

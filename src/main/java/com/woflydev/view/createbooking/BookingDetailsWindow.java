@@ -1,8 +1,6 @@
 package com.woflydev.view.createbooking;
 
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
-import com.github.lgooddatepicker.components.DatePicker;
-import com.github.lgooddatepicker.components.TimePicker;
 import com.woflydev.controller.BookingUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
@@ -12,16 +10,20 @@ import com.woflydev.model.obj.Booking;
 import com.woflydev.model.Config;
 import com.woflydev.model.entity.User;
 import com.woflydev.model.enums.PaymentMethod;
+import raven.datetime.component.date.DatePicker;
+import raven.datetime.component.time.TimePicker;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Date;
 import java.util.UUID;
 
 import static com.woflydev.model.Globals.CURRENT_USER_EMAIL;
@@ -31,10 +33,10 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
 
     private JTextField driverNameField;
     private JTextField driverEmailField;
-    private DatePicker startDatePicker;
-    private TimePicker startTimePicker;
-    private DatePicker endDatePicker;
-    private TimePicker endTimePicker;
+    private CustomDatePicker startDatePicker;
+    private CustomTimePicker startTimePicker;
+    private CustomDatePicker endDatePicker;
+    private CustomTimePicker endTimePicker;
     private JButton confirmButton;
     private JComboBox<PaymentMethod> paymentMethodComboBox; // Updated to use PaymentMethod enum
     private String carId;
@@ -89,36 +91,36 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         mainPanel.add(driverEmailField, gbc);
 
         JLabel startDateLabel = new JLabel("Start Date:");
-        startDatePicker = CustomDatePicker.create();
+        startDatePicker = new CustomDatePicker();
         gbc.gridx = 0;
         gbc.gridy = 3;
         mainPanel.add(startDateLabel, gbc);
         gbc.gridx = 1;
-        mainPanel.add(startDatePicker, gbc);
+        mainPanel.add(startDatePicker.create(), gbc);
 
         JLabel startTimeLabel = new JLabel("Start Time:");
-        startTimePicker = CustomTimePicker.create();
+        startTimePicker = new CustomTimePicker();
         gbc.gridx = 0;
         gbc.gridy = 4;
         mainPanel.add(startTimeLabel, gbc);
         gbc.gridx = 1;
-        mainPanel.add(startTimePicker, gbc);
+        mainPanel.add(startTimePicker.create(), gbc);
 
         JLabel endDateLabel = new JLabel("End Date:");
-        endDatePicker = CustomDatePicker.create();
+        endDatePicker = new CustomDatePicker() ;
         gbc.gridx = 0;
         gbc.gridy = 5;
         mainPanel.add(endDateLabel, gbc);
         gbc.gridx = 1;
-        mainPanel.add(endDatePicker, gbc);
+        mainPanel.add(endDatePicker.create(), gbc);
 
         JLabel endTimeLabel = new JLabel("End Time:");
-        endTimePicker = CustomTimePicker.create();
+        endTimePicker = new CustomTimePicker();
         gbc.gridx = 0;
         gbc.gridy = 6;
         mainPanel.add(endTimeLabel, gbc);
         gbc.gridx = 1;
-        mainPanel.add(endTimePicker, gbc);
+        mainPanel.add(endTimePicker.create(), gbc);
 
         JLabel paymentMethodLabel = new JLabel("Payment Method:");
         paymentMethodComboBox = new JComboBox<>(PaymentMethod.values()); // Use enum values

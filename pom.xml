@@ -27,11 +27,6 @@
             <artifactId>miglayout-swing</artifactId>
             <version>11.3</version>
         </dependency>
-        <dependency> <!-- for calendar date picker -->
-            <groupId>com.github.lgooddatepicker</groupId>
-            <artifactId>LGoodDatePicker</artifactId>
-            <version>11.2.1</version>
-        </dependency>
 
         <dependency> <!-- for JSON serialization -->
             <groupId>com.google.code.gson</groupId>
