@@ -123,6 +123,17 @@ public class RegisterWindow extends JFrame implements ActionListener {
             Date dob = (Date) dobSpinner.getValue();
             LocalDateTime dobLocalDateTime = dob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
 
+            boolean isValid = UserUtils.validateRegistration(
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                    license,
+                    dobLocalDateTime
+            );
+
+            if (!isValid) { return; } // error boxes are displayed in UserUtils.validateRegistration
+
             String hashedPassword = BCryptHash.hashString(password);
 
             Customer newCustomer = new Customer(
@@ -136,7 +147,7 @@ public class RegisterWindow extends JFrame implements ActionListener {
 
             UserUtils.addCustomer(newCustomer);
 
-            WindowUtils.infoBox("Registration successful");
+            WindowUtils.infoBox("Welcome onboard Autolink, " + firstName + "!");
             LoginWindow.open();
             dispose();
         }

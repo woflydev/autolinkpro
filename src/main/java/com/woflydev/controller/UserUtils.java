@@ -7,13 +7,17 @@ import com.woflydev.model.entity.Staff;
 import com.woflydev.model.entity.User;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.woflydev.controller.FileUtils.*;
 import static com.woflydev.model.Config.*;
 import static com.woflydev.model.Globals.*;
 
 public class UserUtils {
+
     public static boolean authenticate(String email, String password) {
         Owner owner = getOwner();
         Staff staff = getStaffByEmail(email);
@@ -26,8 +30,6 @@ public class UserUtils {
         Customer customer = getCustomerByEmail(email);
         return customer != null && BCryptHash.verifyHash(password, customer.getPassword());
     }
-
-    //------------------------------------helper methods--------------------------------------------------\\
 
     public static boolean hasPrivilege(String email, short requiredPrivilege) {
         if (getOwner() != null && getOwner().getEmail().equals(email))
@@ -54,7 +56,6 @@ public class UserUtils {
     public static void updateStaff(Staff updatedStaff) { updateEntity(STAFF_FILE, Staff[].class, updatedStaff, Staff::getEmail); }
     public static void updateCustomer(Customer updatedCustomer) { updateEntity(CUSTOMERS_FILE, Customer[].class, updatedCustomer, Customer::getEmail); }
 
-
     public static Owner getOwner() { // shorthand
         List<Owner> owners = FileUtils.loadListFromDisk(OWNER_FILE, Owner[].class);
         return (owners != null && !owners.isEmpty()) ? owners.get(0) : null;
@@ -63,5 +64,25 @@ public class UserUtils {
     @FunctionalInterface
     public interface EmailGetter<T> {
         String getEmail(T entity);
+    }
+
+    public static boolean validateRegistration(String firstName, String lastName, String email, String password, String license, LocalDateTime dob) {
+        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() || license.isEmpty()) { WindowUtils.errorBox("All fields must be filled out."); return false; }
+        if (!isValidEmail(email)) { WindowUtils.errorBox("Invalid email format."); return false; }
+        if (getUserByEmail(email) != null) { WindowUtils.errorBox("An account with this email already exists."); return false; }
+        if (password.length() < 6) { WindowUtils.errorBox("Password must be at least 6 characters long."); return false; }
+
+        System.out.println(!license.matches("^[0-9]+$"));
+        if (license.length() > 11 || license.length() < 10 || !license.matches("^[0-9]+$")) { WindowUtils.errorBox("Invalid license number."); return false; }
+        if (dob.isAfter(LocalDateTime.now().minusYears(18))) { WindowUtils.errorBox("You must be at least 18 years old to register."); return false; }
+
+        return true;
+    }
+
+    private static boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }
