@@ -7,53 +7,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.woflydev.controller.FileUtils.*;
 import static com.woflydev.model.Globals.*;
 
 public class UserUtils {
-
-    private static <T> List<T> getEntityList(String fileName, Class<T[]> clazz) {
-        FileUtils.initializeSystem();
-        List<T> entities = FileUtils.loadListFromDisk(fileName, clazz);
-        return entities != null ? entities : new ArrayList<>();
-    }
-
-    private static <T> void saveEntityList(List<T> entities, String fileName) {
-        FileUtils.saveToDisk(entities, fileName);
-    }
-
-    private static <T> void addEntity(T entity, String fileName, Class<T[]> clazz) {
-        List<T> entities = getEntityList(fileName, clazz);
-        entities.add(entity);
-        saveEntityList(entities, fileName);
-    }
-
-    private static <T> void deleteEntity(String fileName, Class<T[]> clazz, String email, EmailGetter<T> emailGetter) {
-        List<T> entities = getEntityList(fileName, clazz);
-        entities.removeIf(entity -> emailGetter.getEmail(entity).equals(email));
-        saveEntityList(entities, fileName);
-    }
-
-    private static <T> T getEntityByEmail(String fileName, Class<T[]> clazz, String email, EmailGetter<T> emailGetter) {
-        List<T> entities = getEntityList(fileName, clazz);
-        for (T entity : entities) {
-            if (emailGetter.getEmail(entity).equals(email)) {
-                return entity;
-            }
-        }
-        return null;
-    }
-
-    private static <T> void updateEntity(String fileName, Class<T[]> clazz, T updatedEntity, EmailGetter<T> emailGetter) {
-        List<T> entities = getEntityList(fileName, clazz);
-        for (int i = 0; i < entities.size(); i++) {
-            if (emailGetter.getEmail(entities.get(i)).equals(emailGetter.getEmail(updatedEntity))) {
-                entities.set(i, updatedEntity);
-                saveEntityList(entities, fileName);
-                return;
-            }
-        }
-    }
-
     public static boolean authenticate(String email, String password) {
         Owner owner = getOwner();
         Staff staff = getStaffByEmail(email);
@@ -81,6 +38,7 @@ public class UserUtils {
 
     public static List<Staff> getStaffList() { return getEntityList(STAFF_FILE, Staff[].class); }
     public static List<Customer> getCustomerList() { return getEntityList(CUSTOMERS_FILE, Customer[].class); }
+    public static @Nullable User getUserByEmail(String email) { return getAllEntitiesByEmail(USERS_DIR, User[].class, email, User::getEmail); }
     public static @Nullable Staff getStaffByEmail(String email) { return getEntityByEmail(STAFF_FILE, Staff[].class, email, Staff::getEmail); }
     public static @Nullable Customer getCustomerByEmail(String email) { return getEntityByEmail(CUSTOMERS_FILE, Customer[].class, email, Customer::getEmail); }
 

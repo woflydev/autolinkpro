@@ -95,6 +95,8 @@ public class LoginWindow extends JFrame implements ActionListener {
         add(mainPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
+        getRootPane().setDefaultButton(loginBtn);
+
         setSize(400, 250);
         setLocationRelativeTo(null);
     }
@@ -107,7 +109,6 @@ public class LoginWindow extends JFrame implements ActionListener {
 
             if (UserUtils.authenticate(email, password)) {
                 Globals.CURRENT_USER_EMAIL = email;
-                WindowUtils.infoBox("Login successful");
                 HomeWindow.open();
                 dispose();
             } else {

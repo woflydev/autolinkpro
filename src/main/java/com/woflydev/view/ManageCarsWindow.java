@@ -4,6 +4,7 @@ import com.woflydev.controller.CarUtils;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Car;
+import com.woflydev.model.Globals;
 import com.woflydev.view.table.ButtonEditor;
 import com.woflydev.view.table.ButtonRenderer;
 
@@ -157,9 +158,9 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
     }
 
     private void updateTable() {
-        List<Car> cars = FileUtils.loadListFromDisk("cars.json", Car[].class);
+        List<Car> cars = CarUtils.getCarList();
         String[] columnNames = {"ID", "Make", "Model", "Actions"};
-        Object[][] data = cars != null ? new Object[cars.size()][4] : new Object[0][4];
+        Object[][] data = new Object[cars.size()][4];
 
         if (cars != null) {
             for (int i = 0; i < cars.size(); i++) {

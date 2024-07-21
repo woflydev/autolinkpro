@@ -14,6 +14,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.woflydev.model.Globals.*;
@@ -73,7 +74,7 @@ public class FileUtils {
         }
     }
 
-    public static void saveToDisk(Object data, String filename) {
+    private static void saveToDisk(Object data, String filename) {
         try (Writer writer = new FileWriter(filename)) {
             gson.toJson(data, writer);
         } catch (IOException e) {
@@ -93,14 +94,103 @@ public class FileUtils {
         }
     }
 
-    public static <T> T loadFromDisk(String filename, Class<T> clazz) {
-        try (Reader reader = new FileReader(filename)) {
-            return gson.fromJson(reader, clazz);
-        } catch (FileNotFoundException e) {
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+    // entity interaction with filesystem ---------------------------------------------- \\
+    public static <T> List<T> getEntityList(String fileName, Class<T[]> clazz) {
+        initializeSystem();
+        List<T> entities = loadListFromDisk(fileName, clazz);
+        return entities != null ? entities : new ArrayList<>();
+    }
+
+    public static <T> void saveEntityList(List<T> entities, String fileName) {
+        saveToDisk(entities, fileName);
+    }
+
+    public static <T> void addEntity(T entity, String fileName, Class<T[]> clazz) {
+        List<T> entities = getEntityList(fileName, clazz);
+        entities.add(entity);
+        saveEntityList(entities, fileName);
+    }
+
+    public static <T> void deleteEntity(String fileName, Class<T[]> clazz, String identifier, IdGetter<T> idGetter) {
+        List<T> entities = getEntityList(fileName, clazz);
+        entities.removeIf(entity -> idGetter.getId(entity).equals(identifier));
+        saveEntityList(entities, fileName);
+    }
+
+    public static <T> T getEntityByEmail(
+            String fileName,
+            Class<T[]> clazz,
+            String email,
+            EmailGetter<T> emailGetter
+    ) {
+        List<T> entities = getEntityList(fileName, clazz);
+        for (T entity : entities) {
+            if (emailGetter.getEmail(entity).equals(email)) {
+                return entity;
+            }
         }
+        return null;
+    }
+
+    public static <T> T getEntityById(
+            String fileName,
+            Class<T[]> clazz,
+            String id,
+            IdGetter<T> idGetter
+    ) {
+        List<T> entities = getEntityList(fileName, clazz);
+        for (T entity : entities) {
+            if (idGetter.getId(entity).equals(id)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    public static User getAllEntitiesByEmail(
+            String directoryPath, // Path to the directory containing JSON files
+            Class<User[]> clazz, // Class type for the array of Users
+            String email, // Email to search for
+            EmailGetter<User> emailGetter // Function to extract email from User
+    ) {
+        File dir = new File(directoryPath);
+        if (!dir.isDirectory()) {
+            throw new IllegalArgumentException("Provided path is not a directory");
+        }
+
+        File[] jsonFiles = dir.listFiles((dir1, name) -> name.endsWith(".json"));
+
+        if (jsonFiles != null) {
+            for (File file : jsonFiles) {
+                List<User> users = getEntityList(file.getAbsolutePath(), clazz);
+                for (User user : users) {
+                    if (emailGetter.getEmail(user).equals(email)) {
+                        return user;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static <T> void updateEntity(String fileName, Class<T[]> clazz, T updatedEntity, IdGetter<T> idGetter) {
+        List<T> entities = getEntityList(fileName, clazz);
+        for (int i = 0; i < entities.size(); i++) {
+            if (idGetter.getId(entities.get(i)).equals(idGetter.getId(updatedEntity))) {
+                entities.set(i, updatedEntity);
+                saveEntityList(entities, fileName);
+                return;
+            }
+        }
+    }
+
+    @FunctionalInterface
+    public interface EmailGetter<T> {
+        String getEmail(T entity);
+    }
+
+    @FunctionalInterface
+    public interface IdGetter<T> {
+        String getId(T entity);
     }
 }
