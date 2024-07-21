@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.woflydev.controller.FileUtils.*;
+import static com.woflydev.model.Config.*;
 import static com.woflydev.model.Globals.*;
 
 public class UserUtils {

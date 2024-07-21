@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.woflydev.model.Config.*;
 import static com.woflydev.model.Globals.*;
 
 public class FileUtils {
@@ -66,7 +67,7 @@ public class FileUtils {
             saveToDisk(users, CUSTOMERS_FILE);
         }
 
-        File carsFile = new File(Globals.CARS_FILE);
+        File carsFile = new File(CARS_FILE);
         if (!carsFile.exists()) {
             System.out.println("Initializing cars file...");
             List<Car> cars = new ArrayList<>();

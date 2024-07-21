@@ -1,7 +1,6 @@
 package com.woflydev.model;
 
 import com.woflydev.controller.CarUtils;
-import com.woflydev.controller.UserUtils;
 import com.woflydev.model.enums.PaymentMethod;
 
 import java.time.LocalDateTime;
@@ -9,17 +8,19 @@ import java.time.LocalDateTime;
 public class Booking {
     private String id;
     private String carId;
-    private String customerName;
     private String customerEmail;
+    private String driverFullName;
+    private String driverEmail;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private PaymentMethod paymentMethod;
 
-    public Booking(String id, String carId, String customerName, String customerEmail, LocalDateTime startDateTime, LocalDateTime endDateTime, PaymentMethod paymentMethod) {
+    public Booking(String id, String carId, String customerEmail, String driverFullName, String driverEmail, LocalDateTime startDateTime, LocalDateTime endDateTime, PaymentMethod paymentMethod) {
         this.id = id;
         this.carId = carId;
-        this.customerName = customerName;
         this.customerEmail = customerEmail;
+        this.driverFullName = driverFullName;
+        this.driverEmail = driverEmail;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.paymentMethod = paymentMethod;
@@ -45,20 +46,28 @@ public class Booking {
         this.carId = carId;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
     public String getCustomerEmail() {
         return customerEmail;
     }
 
     public void setCustomerEmail(String customerEmail) {
         this.customerEmail = customerEmail;
+    }
+
+    public String getDriverFullName() {
+        return driverFullName;
+    }
+
+    public void setDriverFullName(String driverFullName) {
+        this.driverFullName = driverFullName;
+    }
+
+    public String getDriverEmail() {
+        return driverEmail;
+    }
+
+    public void setDriverEmail(String driverEmail) {
+        this.driverEmail = driverEmail;
     }
 
     public LocalDateTime getStartDateTime() {

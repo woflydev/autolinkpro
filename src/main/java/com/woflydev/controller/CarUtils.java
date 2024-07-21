@@ -4,7 +4,7 @@ import com.woflydev.model.Car;
 
 import java.util.List;
 
-import static com.woflydev.model.Globals.CARS_FILE;
+import static com.woflydev.model.Config.CARS_FILE;
 
 public class CarUtils {
     public static List<Car> getCarList() { return FileUtils.getEntityList(CARS_FILE, Car[].class); }

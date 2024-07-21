@@ -1,14 +1,9 @@
 package com.woflydev.model;
 
 public class Globals {
+    // static globals
     public static final String USERS_DIR = "data\\users\\";
     public static final String SYSTEM_DIR = "data\\system\\";
-
-    public static final String CUSTOMERS_FILE = USERS_DIR + "customers.json";
-    public static final String OWNER_FILE = USERS_DIR + "owner.json";
-    public static final String STAFF_FILE = USERS_DIR + "staff.json";
-    public static final String CARS_FILE = SYSTEM_DIR + "cars.json";
-    public static final String BOOKINGS_FILE = SYSTEM_DIR + "bookings.json";
 
     public static final short PRIVILEGE_NONE = -1;
     public static final short PRIVILEGE_CUSTOMER = 2;

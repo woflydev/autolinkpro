@@ -8,6 +8,7 @@ import com.woflydev.model.Booking;
 import com.woflydev.model.Globals;
 import com.woflydev.view.table.ButtonEditor;
 import com.woflydev.view.table.ButtonRenderer;
+import com.woflydev.view.table.DateTimeCellRenderer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,15 +17,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ManageBookingsWindow extends JFrame implements ActionListener {
     public static ManageBookingsWindow instance = null;
 
-    private JButton addBookingButton;
     private JTable bookingTable;
     private DefaultTableModel tableModel;
     private TableRowSorter<DefaultTableModel> rowSorter;
+
+    private String[] columnNames = {"ID", "Car Make", "Car Model", "Driver", "Start Date", "End Date", "Actions"};
 
     public ManageBookingsWindow() {
         setTitle("Manage Bookings");
@@ -51,19 +52,6 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
         gbc.weighty = 0.1;
         mainPanel.add(headingLabel, gbc);
 
-        addBookingButton = new JButton("Add New Booking");
-        addBookingButton.setPreferredSize(new Dimension(150, 40));
-        addBookingButton.setBackground(new Color(0, 120, 215));
-        addBookingButton.setForeground(Color.WHITE);
-        addBookingButton.setFocusPainted(false);
-        addBookingButton.addActionListener(this);
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weighty = 0.0;
-        mainPanel.add(addBookingButton, gbc);
-
-        String[] columnNames = {"ID", "Car Make", "Car Model", "Customer", "Actions"};
         tableModel = new DefaultTableModel(columnNames, 0);
         bookingTable = new JTable(tableModel);
         bookingTable.setCellSelectionEnabled(true);
@@ -71,7 +59,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
         bookingTable.setRowSorter(rowSorter);
         JScrollPane scrollPane = new JScrollPane(bookingTable);
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 1; // Adjusted to fit new layout
         gbc.gridwidth = 2;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -81,49 +69,54 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
 
         add(mainPanel, BorderLayout.CENTER);
 
-        setSize(700, 400);
+        setSize(800, 400); // Adjust size to accommodate new columns
         setLocationRelativeTo(null);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == addBookingButton) {
-            addNewBooking();
-        }
+        // No action needed for removed button
     }
 
     private void addNewBooking() {
+        // Implementation not needed as button is removed
+    }
 
+    private void editBooking(String bookingId) {
+        // Implementation unchanged
     }
 
     private void updateTable() {
         List<Booking> bookings = BookingUtils.getBookingList();
-        String[] columnNames = {"ID", "Car Make", "Car Model", "Customer", "Actions"};
         Object[][] data;
 
         if (UserUtils.hasPrivilege(Globals.CURRENT_USER_EMAIL, Globals.PRIVILEGE_STAFF)) {
-            data = new Object[bookings.size()][5];
+            data = new Object[bookings.size()][7];
             for (int i = 0; i < bookings.size(); i++) {
                 Booking booking = bookings.get(i);
                 data[i][0] = booking.getId();
                 data[i][1] = booking.getCar().getMake();
                 data[i][2] = booking.getCar().getModel();
-                data[i][3] = booking.getCustomerEmail();
-                data[i][4] = Globals.CURRENT_PRIVILEGE <= Globals.PRIVILEGE_STAFF ? "Edit/Delete" : "";
+                data[i][3] = booking.getDriverFullName();
+                data[i][4] = booking.getStartDateTime();
+                data[i][5] = booking.getEndDateTime();
+                data[i][6] = Globals.CURRENT_PRIVILEGE <= Globals.PRIVILEGE_STAFF ? "Edit/Delete" : "";
             }
         } else {
             List<Booking> customerBookings = bookings.stream()
                     .filter(booking -> booking.getCustomerEmail().equals(Globals.CURRENT_USER_EMAIL))
                     .toList();
 
-            data = new Object[customerBookings.size()][5];
+            data = new Object[customerBookings.size()][7];
             for (int i = 0; i < customerBookings.size(); i++) {
                 Booking booking = customerBookings.get(i);
                 data[i][0] = booking.getId();
                 data[i][1] = booking.getCar().getMake();
                 data[i][2] = booking.getCar().getModel();
-                data[i][3] = booking.getCustomerEmail();
-                data[i][4] = "";
+                data[i][3] = booking.getDriverFullName();
+                data[i][4] = booking.getStartDateTime();
+                data[i][5] = booking.getEndDateTime();
+                data[i][6] = "";
             }
         }
 
@@ -131,6 +124,8 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
             tableModel.setDataVector(data, columnNames);
 
             bookingTable.setRowHeight(75);
+            bookingTable.getColumn("Start Date").setCellRenderer(new DateTimeCellRenderer());
+            bookingTable.getColumn("End Date").setCellRenderer(new DateTimeCellRenderer());
             bookingTable.getColumn("Actions").setCellRenderer(new ButtonRenderer(new String[]{"Edit", "Delete"}));
             bookingTable.getColumn("Actions").setCellEditor(
                     new ButtonEditor(new JCheckBox(), new String[]{"Edit", "Delete"}, new Runnable[]{
@@ -147,10 +142,6 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
                             }
                     }));
         }
-    }
-
-    private void editBooking(String bookingId) {
-
     }
 
     public static void open() {

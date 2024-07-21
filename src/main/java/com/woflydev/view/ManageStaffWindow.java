@@ -15,8 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import static com.woflydev.model.Globals.STAFF_FILE;
-
 public class ManageStaffWindow extends JFrame implements ActionListener {
     public static ManageStaffWindow instance = null;
 

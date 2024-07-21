@@ -14,12 +14,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-
-import static com.woflydev.model.Globals.CUSTOMERS_FILE;
 
 public class ManageCustomersWindow extends JFrame implements ActionListener {
     public static ManageCustomersWindow instance = null;

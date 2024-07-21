@@ -16,8 +16,6 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import static com.woflydev.model.Globals.CUSTOMERS_FILE;
-
 public class RegisterWindow extends JFrame implements ActionListener {
     private static RegisterWindow instance = null;
 

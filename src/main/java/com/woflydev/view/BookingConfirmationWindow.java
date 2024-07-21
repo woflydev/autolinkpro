@@ -1,15 +1,15 @@
 package com.woflydev.view;
 
-import com.woflydev.controller.CarUtils;
-import com.woflydev.controller.FileUtils;
+import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Booking;
-import com.woflydev.model.Car;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 
 public class BookingConfirmationWindow extends JFrame {
+    public static BookingConfirmationWindow instance = null;
+
     public BookingConfirmationWindow(Booking booking) {
         setTitle("Booking Confirmed!");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -38,8 +38,8 @@ public class BookingConfirmationWindow extends JFrame {
 
         JLabel bookingIdLabel = new JLabel("Booking ID: " + booking.getId());
         JLabel carInfoLabel = new JLabel("Car Details: " + booking.getCar().getMake() + " " + booking.getCar().getModel());
-        JLabel customerNameLabel = new JLabel("Customer Name: " + booking.getCustomerName());
-        JLabel customerEmailLabel = new JLabel("Customer Email: " + booking.getCustomerEmail());
+        JLabel customerNameLabel = new JLabel("Driver Name: " + booking.getDriverFullName());
+        JLabel customerEmailLabel = new JLabel("Driver Email: " + booking.getDriverEmail());
         JLabel startDateTimeLabel = new JLabel("Start Date & Time: " + booking.getStartDateTime().format(dateTimeFormatter));
         JLabel endDateTimeLabel = new JLabel("End Date & Time: " + booking.getEndDateTime().format(dateTimeFormatter));
         JLabel paymentMethodLabel = new JLabel("Payment Method: " + booking.getPaymentMethod());
@@ -74,5 +74,18 @@ public class BookingConfirmationWindow extends JFrame {
         mainPanel.add(okButton, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
+    }
+
+    public static void open(Booking booking) {
+        if (instance == null) {
+            instance = new BookingConfirmationWindow(booking);
+            WindowUtils.register(instance);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        instance = null;
     }
 }

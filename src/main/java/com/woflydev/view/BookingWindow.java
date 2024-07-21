@@ -25,7 +25,7 @@ public class BookingWindow extends JFrame implements ActionListener {
     private TableRowSorter<DefaultTableModel> rowSorter;
 
     public BookingWindow() {
-        setTitle("Create Booking");
+        setTitle("New Booking");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -40,27 +40,24 @@ public class BookingWindow extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // Heading label
-        JLabel headingLabel = new JLabel("Create Booking", SwingConstants.CENTER);
+        JLabel headingLabel = new JLabel("Choose a Car", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
         headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        gbc.weighty = 0.1; // Allow the heading to occupy some vertical space
+        gbc.weighty = 0.1;
         mainPanel.add(headingLabel, gbc);
 
-        // Search bar and filter dropdown
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5)); // Adjusted padding
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
         searchPanel.setBackground(Color.WHITE);
 
         searchField = new JTextField();
-        searchField.setPreferredSize(new Dimension(150, 25)); // Adjusted size
+        searchField.setPreferredSize(new Dimension(150, 25));
         searchField.addActionListener(e -> filterTable());
         searchPanel.add(new JLabel("Search:"));
         searchPanel.add(searchField);
 
-        // Filter dropdown
         filterCombo = new JComboBox<>(new String[]{"Make", "Model"});
         filterCombo.addActionListener(e -> filterTable());
         searchPanel.add(filterCombo);
@@ -71,7 +68,6 @@ public class BookingWindow extends JFrame implements ActionListener {
         gbc.weighty = 0.1;
         mainPanel.add(searchPanel, gbc);
 
-        // Initialize tableModel before setting up the table
         String[] columnNames = {"ID", "Make", "Model", "Actions"};
         tableModel = new DefaultTableModel(columnNames, 0);
         carTable = new JTable(tableModel);
@@ -82,16 +78,14 @@ public class BookingWindow extends JFrame implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        gbc.weighty = 1.0; // Allow the table to take up remaining vertical space
+        gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(scrollPane, gbc);
 
-        // Set initial table data
         updateTable();
 
         add(mainPanel, BorderLayout.CENTER);
 
-        // Increased height from 400 to 500
         setSize(700, 500);
         setLocationRelativeTo(null);
     }
