@@ -9,6 +9,7 @@ import com.woflydev.view.table.ButtonRenderer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +20,9 @@ public class BookingWindow extends JFrame implements ActionListener {
 
     private JTable carTable;
     private DefaultTableModel tableModel;
+    private JTextField searchField;
+    private JComboBox<String> filterCombo;
+    private TableRowSorter<DefaultTableModel> rowSorter;
 
     public BookingWindow() {
         setTitle("Create Booking");
@@ -46,14 +50,37 @@ public class BookingWindow extends JFrame implements ActionListener {
         gbc.weighty = 0.1; // Allow the heading to occupy some vertical space
         mainPanel.add(headingLabel, gbc);
 
+        // Search bar and filter dropdown
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5)); // Adjusted padding
+        searchPanel.setBackground(Color.WHITE);
+
+        searchField = new JTextField();
+        searchField.setPreferredSize(new Dimension(150, 25)); // Adjusted size
+        searchField.addActionListener(e -> filterTable());
+        searchPanel.add(new JLabel("Search:"));
+        searchPanel.add(searchField);
+
+        // Filter dropdown
+        filterCombo = new JComboBox<>(new String[]{"Make", "Model"});
+        filterCombo.addActionListener(e -> filterTable());
+        searchPanel.add(filterCombo);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.weighty = 0.1;
+        mainPanel.add(searchPanel, gbc);
+
         // Initialize tableModel before setting up the table
         String[] columnNames = {"ID", "Make", "Model", "Actions"};
         tableModel = new DefaultTableModel(columnNames, 0);
         carTable = new JTable(tableModel);
         carTable.setCellSelectionEnabled(true);
+        rowSorter = new TableRowSorter<>(tableModel);
+        carTable.setRowSorter(rowSorter);
         JScrollPane scrollPane = new JScrollPane(carTable);
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.weighty = 1.0; // Allow the table to take up remaining vertical space
         gbc.fill = GridBagConstraints.BOTH;
@@ -64,7 +91,8 @@ public class BookingWindow extends JFrame implements ActionListener {
 
         add(mainPanel, BorderLayout.CENTER);
 
-        setSize(700, 400);
+        // Increased height from 400 to 500
+        setSize(700, 500);
         setLocationRelativeTo(null);
     }
 
@@ -102,6 +130,25 @@ public class BookingWindow extends JFrame implements ActionListener {
                             }
                     }));
         }
+    }
+
+    private void filterTable() {
+        String searchText = searchField.getText().toLowerCase();
+        String selectedFilter = (String) filterCombo.getSelectedItem();
+
+        RowFilter<DefaultTableModel, Object> searchFilter = RowFilter.regexFilter("(?i)" + searchText, 1, 2);
+        RowFilter<DefaultTableModel, Object> filter;
+
+        if ("Make".equals(selectedFilter)) {
+            filter = RowFilter.regexFilter("(?i)" + searchText, 1);
+        } else if ("Model".equals(selectedFilter)) {
+            filter = RowFilter.regexFilter("(?i)" + searchText, 2);
+        } else {
+            filter = RowFilter.regexFilter(".*", 1, 2);
+        }
+
+        RowFilter<DefaultTableModel, Object> combinedFilter = RowFilter.andFilter(List.of(searchFilter, filter));
+        rowSorter.setRowFilter(combinedFilter);
     }
 
     public static void open() {
