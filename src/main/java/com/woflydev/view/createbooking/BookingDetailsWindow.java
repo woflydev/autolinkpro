@@ -1,11 +1,11 @@
 package com.woflydev.view.createbooking;
 
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.BookingUtils;
+import com.woflydev.controller.StyleUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
-import com.woflydev.view.util.component.CustomDatePicker;
-import com.woflydev.view.util.component.CustomTimePicker;
+import com.woflydev.view.util.swing.CustomDatePicker;
+import com.woflydev.view.util.swing.CustomTimePicker;
 import com.woflydev.model.obj.Booking;
 import com.woflydev.model.Config;
 import com.woflydev.model.entity.User;
@@ -15,15 +15,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.util.Date;
 import java.util.UUID;
 
+import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
 import static com.woflydev.model.Globals.CURRENT_USER_EMAIL;
 
 public class BookingDetailsWindow extends JFrame implements ActionListener {
@@ -132,6 +130,7 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         confirmButton.setPreferredSize(new Dimension(150, 40));
         confirmButton.setFocusPainted(false);
         confirmButton.addActionListener(this);
+        StyleUtils.applyButtonStyle(confirmButton, PRIMARY);
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.gridwidth = 2;

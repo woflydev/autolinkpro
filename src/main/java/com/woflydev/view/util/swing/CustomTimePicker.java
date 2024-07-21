@@ -1,4 +1,4 @@
-package com.woflydev.view.util.component;
+package com.woflydev.view.util.swing;
 
 import raven.datetime.component.time.TimePicker;
 

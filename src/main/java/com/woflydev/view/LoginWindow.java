@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.woflydev.controller.FileUtils;
@@ -72,6 +73,7 @@ public class LoginWindow extends JFrame implements ActionListener {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         loginBtn = new JButton("Login");
+        System.out.println(loginBtn.getClientProperty("Button.foreground"));
         loginBtn.setPreferredSize(new Dimension(100, 30));
         loginBtn.setFocusPainted(false);
         loginBtn.addActionListener(this);

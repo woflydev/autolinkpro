@@ -1,4 +1,4 @@
-package com.woflydev.view.util.table;
+package com.woflydev.view.util.table.button;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;

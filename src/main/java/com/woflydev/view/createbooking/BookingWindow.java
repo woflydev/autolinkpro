@@ -1,12 +1,13 @@
 package com.woflydev.view.createbooking;
 
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.CarUtils;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.obj.Car;
-import com.woflydev.view.util.table.ButtonEditor;
-import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.BorderlessTableRenderer;
+import com.woflydev.view.util.table.CustomJTable;
+import com.woflydev.view.util.table.button.ButtonEditor;
+import com.woflydev.view.util.table.button.ButtonRenderer;
 import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ import java.util.List;
 public class BookingWindow extends JFrame implements ActionListener {
     public static BookingWindow instance = null;
 
-    private JTable carTable;
+    private CustomJTable carTable;
     private NonEditableTableModel tableModel;
     private JTextField searchField;
     private JComboBox<String> filterCombo;
@@ -69,8 +70,7 @@ public class BookingWindow extends JFrame implements ActionListener {
 
         String[] columnNames = {"ID", "Make", "Model", "Actions"};
         tableModel = new NonEditableTableModel(columnNames, 0);
-        carTable = new JTable(tableModel);
-        carTable.setCellSelectionEnabled(true);
+        carTable = new CustomJTable(tableModel);
         rowSorter = new TableRowSorter<>(tableModel);
         carTable.setRowSorter(rowSorter);
         JScrollPane scrollPane = new JScrollPane(carTable);

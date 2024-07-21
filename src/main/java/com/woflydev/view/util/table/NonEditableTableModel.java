@@ -2,8 +2,14 @@ package com.woflydev.view.util.table;
 
 import javax.swing.table.DefaultTableModel;
 
+/**
+ * Normally, setting the table to non-editable would suffice, but
+ * since the application uses buttons, we need to make exceptions.
+ * <p>
+ * This model makes it so that only the last column (the Actions column) is editable.
+ */
 public class NonEditableTableModel extends DefaultTableModel {
-    private final int editableColumnIndex; // Column index where editing is allowed (e.g., Actions column)
+    private final int editableColumnIndex;
 
     public NonEditableTableModel(String[] columnNames, int rowCount) {
         super(columnNames, rowCount);

@@ -1,8 +1,12 @@
-package com.woflydev.view.util.table;
+package com.woflydev.view.util.table.button;
+
+import com.woflydev.controller.StyleUtils;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+
+import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.*;
 
 public class ButtonRenderer extends JPanel implements TableCellRenderer {
     private final JButton[] buttons;
@@ -22,6 +26,13 @@ public class ButtonRenderer extends JPanel implements TableCellRenderer {
             buttons[i].setFont(new Font("Arial", Font.PLAIN, 12));
             buttons[i].setMargin(new Insets(2, 2, 2, 2));
             buttons[i].setFocusPainted(false);
+
+            // apply different classes depending on button
+            if (labels[i].toLowerCase().equals("delete"))
+                StyleUtils.applyButtonStyle(buttons[i], WARNING);
+            else
+                StyleUtils.applyButtonStyle(buttons[i], SECONDARY);
+
             gbc.gridy = i;
             add(buttons[i], gbc);
         }

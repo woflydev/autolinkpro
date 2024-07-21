@@ -1,14 +1,14 @@
 package com.woflydev.view.manage;
 
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.BookingUtils;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.obj.Booking;
 import com.woflydev.model.Globals;
-import com.woflydev.view.util.table.ButtonEditor;
-import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.CustomJTable;
+import com.woflydev.view.util.table.button.ButtonEditor;
+import com.woflydev.view.util.table.button.ButtonRenderer;
 import com.woflydev.view.util.table.DateTimeCellRenderer;
 import com.woflydev.view.util.table.NonEditableTableModel;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class ManageBookingsWindow extends JFrame implements ActionListener {
     public static ManageBookingsWindow instance = null;
 
-    private JTable bookingTable;
+    private CustomJTable bookingTable;
     private NonEditableTableModel tableModel;
     private TableRowSorter<NonEditableTableModel> rowSorter;
 
@@ -52,8 +52,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
         mainPanel.add(headingLabel, gbc);
 
         tableModel = new NonEditableTableModel(columnNames, 0);
-        bookingTable = new JTable(tableModel);
-        bookingTable.setCellSelectionEnabled(true);
+        bookingTable = new CustomJTable(tableModel);
         rowSorter = new TableRowSorter<>(tableModel);
         bookingTable.setRowSorter(rowSorter);
         JScrollPane scrollPane = new JScrollPane(bookingTable);

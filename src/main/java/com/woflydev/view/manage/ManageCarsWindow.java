@@ -1,12 +1,13 @@
 package com.woflydev.view.manage;
 
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.CarUtils;
 import com.woflydev.controller.FileUtils;
+import com.woflydev.controller.StyleUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.obj.Car;
-import com.woflydev.view.util.table.ButtonEditor;
-import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.CustomJTable;
+import com.woflydev.view.util.table.button.ButtonEditor;
+import com.woflydev.view.util.table.button.ButtonRenderer;
 import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
@@ -16,11 +17,13 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.UUID;
 
+import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
+
 public class ManageCarsWindow extends JFrame implements ActionListener {
     public static ManageCarsWindow instance = null;
 
     private JButton addCarButton;
-    private JTable carTable;
+    private CustomJTable carTable;
     private NonEditableTableModel tableModel;
 
     public ManageCarsWindow() {
@@ -44,34 +47,32 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        gbc.weighty = 0.1; // Allow the heading to occupy some vertical space
+        gbc.weighty = 0.1;
         mainPanel.add(headingLabel, gbc);
 
-        // Add Car button
         addCarButton = new JButton("Add New Car");
         addCarButton.setPreferredSize(new Dimension(150, 40));
         addCarButton.setFocusPainted(false);
         addCarButton.addActionListener(this);
-        gbc.gridwidth = 1; // Reset gridwidth for button
+        StyleUtils.applyButtonStyle(addCarButton, PRIMARY);
+
+        gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.weighty = 0.0; // Reset weighty for button
+        gbc.weighty = 0.0;
         mainPanel.add(addCarButton, gbc);
 
-        // Initialize tableModel before setting up the table
         String[] columnNames = {"ID", "Make", "Model", "Actions"};
         tableModel = new NonEditableTableModel(columnNames, 0);
-        carTable = new JTable(tableModel);
-        carTable.setCellSelectionEnabled(true);
+        carTable = new CustomJTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(carTable);
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        gbc.weighty = 1.0; // Allow the table to take up remaining vertical space
+        gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(scrollPane, gbc);
 
-        // Set initial table data
         updateTable();
 
         add(mainPanel, BorderLayout.CENTER);

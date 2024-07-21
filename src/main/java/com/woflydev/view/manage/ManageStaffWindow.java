@@ -1,27 +1,29 @@
 package com.woflydev.view.manage;
 
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.woflydev.controller.StyleUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.controller.hash.BCryptHash;
 import com.woflydev.model.Globals;
 import com.woflydev.model.entity.Staff;
-import com.woflydev.view.util.table.ButtonEditor;
-import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.CustomJTable;
+import com.woflydev.view.util.table.button.ButtonEditor;
+import com.woflydev.view.util.table.button.ButtonRenderer;
 import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
+
 public class ManageStaffWindow extends JFrame implements ActionListener {
     public static ManageStaffWindow instance = null;
 
     private JButton addStaffButton;
-    private JTable staffTable;
+    private CustomJTable staffTable;
     private NonEditableTableModel tableModel;
 
     public ManageStaffWindow() {
@@ -49,6 +51,8 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         addStaffButton.setPreferredSize(new Dimension(150, 40));
         addStaffButton.setFocusPainted(false);
         addStaffButton.addActionListener(this);
+        StyleUtils.applyButtonStyle(addStaffButton, PRIMARY);
+
         gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -57,10 +61,8 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
 
         String[] columnNames = {"First Name", "Last Name", "Email", "Actions"};
         tableModel = new NonEditableTableModel(columnNames, 0);
-        staffTable = new JTable(tableModel);
-        staffTable.setCellSelectionEnabled(true);
+        staffTable = new CustomJTable(tableModel);
         staffTable.setAutoCreateRowSorter(true);
-        staffTable.setFillsViewportHeight(true);
 
         JScrollPane scrollPane = new JScrollPane(staffTable);
         gbc.gridx = 0;

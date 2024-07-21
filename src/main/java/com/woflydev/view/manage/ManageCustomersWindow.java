@@ -1,17 +1,17 @@
 package com.woflydev.view.manage;
 
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.woflydev.controller.StyleUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.controller.hash.BCryptHash;
 import com.woflydev.model.entity.Customer;
 import com.woflydev.model.Globals;
-import com.woflydev.view.util.table.ButtonEditor;
-import com.woflydev.view.util.table.ButtonRenderer;
+import com.woflydev.view.util.table.CustomJTable;
+import com.woflydev.view.util.table.button.ButtonEditor;
+import com.woflydev.view.util.table.button.ButtonRenderer;
 import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,11 +20,13 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
+
 public class ManageCustomersWindow extends JFrame implements ActionListener {
     public static ManageCustomersWindow instance = null;
 
     private JButton addCustomerButton;
-    private JTable customerTable;
+    private CustomJTable customerTable;
     private NonEditableTableModel tableModel;
 
     public ManageCustomersWindow() {
@@ -32,7 +34,6 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Main panel for buttons and table
         JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -40,40 +41,36 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // Heading label
         JLabel headingLabel = new JLabel("Manage Customers", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        gbc.weighty = 0.1; // Allow the heading to occupy some vertical space
+        gbc.weighty = 0.1;
         mainPanel.add(headingLabel, gbc);
 
-        // Add Customer button
         addCustomerButton = new JButton("Add New Customer");
         addCustomerButton.setPreferredSize(new Dimension(150, 40));
         addCustomerButton.setFocusPainted(false);
         addCustomerButton.addActionListener(this);
-        gbc.gridwidth = 1; // Reset gridwidth for button
+        StyleUtils.applyButtonStyle(addCustomerButton, PRIMARY);
+
+        gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.weighty = 0.0; // Reset weighty for button
+        gbc.weighty = 0.0;
         mainPanel.add(addCustomerButton, gbc);
 
-        // Initialize tableModel before setting up the table
         String[] columnNames = {"First Name", "Last Name", "Email", "License", "Date of Birth", "Actions"};
         tableModel = new NonEditableTableModel(columnNames, 0);
-        customerTable = new JTable(tableModel);
-        customerTable.setCellSelectionEnabled(true);
+        customerTable = new CustomJTable(tableModel);
         customerTable.setAutoCreateRowSorter(true);
-        customerTable.setFillsViewportHeight(true);
 
-        // Add the table to the scroll pane
         JScrollPane scrollPane = new JScrollPane(customerTable);
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        gbc.weighty = 1.0; // Allow the table to take up remaining vertical space
+        gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(scrollPane, gbc);
 

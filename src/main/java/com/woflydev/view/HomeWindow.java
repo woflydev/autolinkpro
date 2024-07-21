@@ -1,6 +1,11 @@
 package com.woflydev.view;
 
+import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
+import com.formdev.flatlaf.extras.components.FlatButton;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.woflydev.controller.StyleUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Globals;
 import com.woflydev.view.createbooking.BookingWindow;
@@ -11,6 +16,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
+import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.WARNING;
 import static com.woflydev.model.Globals.PRIVILEGE_STAFF;
 import static com.woflydev.controller.UserUtils.hasPrivilege;
 import java.util.ArrayList;
@@ -54,12 +61,13 @@ public class HomeWindow extends JFrame implements ActionListener {
         settingsButton = new JButton("Settings");
         adminButton = new JButton("Admin");
         logoutButton = new JButton("Logout");
+        StyleUtils.applyButtonStyle(logoutButton, WARNING);
 
         createBookingButton.setPreferredSize(new Dimension(150, 40));
         manageBookingsButton.setPreferredSize(new Dimension(150, 40));
         settingsButton.setPreferredSize(new Dimension(150, 40));
         adminButton.setPreferredSize(new Dimension(150, 40));
-        logoutButton.setPreferredSize(new Dimension(100, 30)); // Smaller logout button
+        logoutButton.setPreferredSize(new Dimension(100, 30));
 
         createBookingButton.setFocusPainted(false);
         manageBookingsButton.setFocusPainted(false);

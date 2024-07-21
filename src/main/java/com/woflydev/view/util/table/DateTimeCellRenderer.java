@@ -6,6 +6,9 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Custom formatting for putting date-times into table cells.
+ */
 public class DateTimeCellRenderer extends JLabel implements TableCellRenderer {
 
     private final DateTimeFormatter dateFormatter;
