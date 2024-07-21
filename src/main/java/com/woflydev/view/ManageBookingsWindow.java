@@ -93,8 +93,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
     }
 
     private void addNewBooking() {
-        // Add your logic to handle adding a new booking here
-        // For example, open a dialog to enter booking details
+
     }
 
     private void updateTable() {
@@ -124,7 +123,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
                 data[i][1] = booking.getCar().getMake();
                 data[i][2] = booking.getCar().getModel();
                 data[i][3] = booking.getCustomerEmail();
-                data[i][4] = ""; // No actions for customers
+                data[i][4] = "";
             }
         }
 
@@ -151,8 +150,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
     }
 
     private void editBooking(String bookingId) {
-        // Add your logic to handle editing a booking here
-        // For example, open a dialog to edit booking details
+
     }
 
     public static void open() {
