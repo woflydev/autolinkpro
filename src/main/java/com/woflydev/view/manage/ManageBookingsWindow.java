@@ -1,5 +1,6 @@
 package com.woflydev.view.manage;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.BookingUtils;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.UserUtils;
@@ -12,7 +13,6 @@ import com.woflydev.view.util.table.DateTimeCellRenderer;
 import com.woflydev.view.util.table.NonEditableTableModel;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -37,7 +37,6 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
         FileUtils.initializeSystem();
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -46,7 +45,6 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
 
         JLabel headingLabel = new JLabel("Manage Bookings", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headingLabel.setForeground(new Color(0, 120, 215));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -97,7 +95,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
                 data[i][3] = booking.getDriverFullName();
                 data[i][4] = booking.getStart();
                 data[i][5] = booking.getEnd();
-                data[i][6] = UserUtils.hasPrivilege(Globals.CURRENT_USER_EMAIL, Globals.PRIVILEGE_STAFF) ? "Edit/Delete" : "";
+                data[i][6] = "Edit/Delete";
             }
         } else {
             List<Booking> customerBookings = bookings.stream()

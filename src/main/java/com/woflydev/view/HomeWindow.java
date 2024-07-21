@@ -1,5 +1,6 @@
 package com.woflydev.view;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Globals;
 import com.woflydev.view.createbooking.BookingWindow;
@@ -33,7 +34,6 @@ public class HomeWindow extends JFrame implements ActionListener {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -43,7 +43,6 @@ public class HomeWindow extends JFrame implements ActionListener {
 
         JLabel headingLabel = new JLabel("Home", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headingLabel.setForeground(new Color(0, 120, 215));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -61,18 +60,6 @@ public class HomeWindow extends JFrame implements ActionListener {
         settingsButton.setPreferredSize(new Dimension(150, 40));
         adminButton.setPreferredSize(new Dimension(150, 40));
         logoutButton.setPreferredSize(new Dimension(100, 30)); // Smaller logout button
-
-        createBookingButton.setBackground(new Color(0, 120, 215));
-        manageBookingsButton.setBackground(new Color(0, 120, 215));
-        settingsButton.setBackground(new Color(0, 120, 215));
-        adminButton.setBackground(new Color(0, 120, 215));
-        logoutButton.setBackground(new Color(255, 69, 58)); // Red color for logout
-
-        createBookingButton.setForeground(Color.WHITE);
-        manageBookingsButton.setForeground(Color.WHITE);
-        settingsButton.setForeground(Color.WHITE);
-        adminButton.setForeground(Color.WHITE);
-        logoutButton.setForeground(Color.WHITE);
 
         createBookingButton.setFocusPainted(false);
         manageBookingsButton.setFocusPainted(false);
@@ -111,7 +98,6 @@ public class HomeWindow extends JFrame implements ActionListener {
         add(mainPanel, BorderLayout.CENTER);
 
         JPanel footerPanel = new JPanel();
-        footerPanel.setBackground(new Color(240, 240, 240));
         footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         footerPanel.setLayout(new BorderLayout());
 

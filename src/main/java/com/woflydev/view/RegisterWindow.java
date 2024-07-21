@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
@@ -33,7 +35,6 @@ public class RegisterWindow extends JFrame implements ActionListener {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -43,7 +44,6 @@ public class RegisterWindow extends JFrame implements ActionListener {
 
         JLabel titleLabel = new JLabel("Register", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(0, 120, 215));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -81,19 +81,14 @@ public class RegisterWindow extends JFrame implements ActionListener {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        buttonPanel.setBackground(Color.WHITE);
 
         registerBtn = new JButton("Register");
         registerBtn.setPreferredSize(new Dimension(120, 30));
-        registerBtn.setBackground(new Color(0, 120, 215));
-        registerBtn.setForeground(Color.WHITE);
         registerBtn.setFocusPainted(false);
         registerBtn.addActionListener(this);
 
         backBtn = new JButton("Back");
         backBtn.setPreferredSize(new Dimension(120, 30));
-        backBtn.setBackground(new Color(0, 120, 215));
-        backBtn.setForeground(Color.WHITE);
         backBtn.setFocusPainted(false);
         backBtn.addActionListener(e -> {
             LoginWindow.open();

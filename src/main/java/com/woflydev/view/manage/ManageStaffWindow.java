@@ -1,5 +1,6 @@
 package com.woflydev.view.manage;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.controller.hash.BCryptHash;
@@ -28,9 +29,7 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Main panel for buttons and table
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -40,27 +39,22 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         // Heading label
         JLabel headingLabel = new JLabel("Manage Staff", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        gbc.weighty = 0.1; // Allow the heading to occupy some vertical space
+        gbc.weighty = 0.1;
         mainPanel.add(headingLabel, gbc);
 
-        // Add Staff button
         addStaffButton = new JButton("Add New Staff");
         addStaffButton.setPreferredSize(new Dimension(150, 40));
-        addStaffButton.setBackground(new Color(0, 120, 215));
-        addStaffButton.setForeground(Color.WHITE);
         addStaffButton.setFocusPainted(false);
         addStaffButton.addActionListener(this);
-        gbc.gridwidth = 1; // Reset gridwidth for button
+        gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.weighty = 0.0; // Reset weighty for button
+        gbc.weighty = 0.0;
         mainPanel.add(addStaffButton, gbc);
 
-        // Initialize tableModel before setting up the table
         String[] columnNames = {"First Name", "Last Name", "Email", "Actions"};
         tableModel = new NonEditableTableModel(columnNames, 0);
         staffTable = new JTable(tableModel);
@@ -68,12 +62,11 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         staffTable.setAutoCreateRowSorter(true);
         staffTable.setFillsViewportHeight(true);
 
-        // Add the table to the scroll pane
         JScrollPane scrollPane = new JScrollPane(staffTable);
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 2;
-        gbc.weighty = 1.0; // Allow the table to take up remaining vertical space
+        gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(scrollPane, gbc);
 
@@ -82,7 +75,6 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         setSize(700, 400);
         setLocationRelativeTo(null);
 
-        // Set initial table data
         updateTable();
     }
 
@@ -101,14 +93,12 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // First Name
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.EAST;
@@ -119,7 +109,6 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(firstNameField, gbc);
 
-        // Last Name
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.EAST;
@@ -130,7 +119,6 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(lastNameField, gbc);
 
-        // Email
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.EAST;
@@ -141,7 +129,6 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         panel.add(emailField, gbc);
 
-        // Password
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.EAST;
@@ -187,7 +174,6 @@ public class ManageStaffWindow extends JFrame implements ActionListener {
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);

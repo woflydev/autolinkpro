@@ -1,5 +1,6 @@
 package com.woflydev.view.createbooking;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.CarUtils;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.WindowUtils;
@@ -34,7 +35,6 @@ public class BookingWindow extends JFrame implements ActionListener {
 
         // Main panel for table
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -43,7 +43,6 @@ public class BookingWindow extends JFrame implements ActionListener {
 
         JLabel headingLabel = new JLabel("Choose a Car", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -51,7 +50,6 @@ public class BookingWindow extends JFrame implements ActionListener {
         mainPanel.add(headingLabel, gbc);
 
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
-        searchPanel.setBackground(Color.WHITE);
 
         searchField = new JTextField();
         searchField.setPreferredSize(new Dimension(150, 25));

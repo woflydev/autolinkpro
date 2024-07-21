@@ -1,5 +1,6 @@
 package com.woflydev.view.manage;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.controller.hash.BCryptHash;
@@ -33,7 +34,6 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
 
         // Main panel for buttons and table
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -43,7 +43,6 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         // Heading label
         JLabel headingLabel = new JLabel("Manage Customers", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -53,8 +52,6 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         // Add Customer button
         addCustomerButton = new JButton("Add New Customer");
         addCustomerButton.setPreferredSize(new Dimension(150, 40));
-        addCustomerButton.setBackground(new Color(0, 120, 215));
-        addCustomerButton.setForeground(Color.WHITE);
         addCustomerButton.setFocusPainted(false);
         addCustomerButton.addActionListener(this);
         gbc.gridwidth = 1; // Reset gridwidth for button
@@ -85,7 +82,6 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         setSize(800, 400);
         setLocationRelativeTo(null);
 
-        // Set initial table data
         updateTable();
     }
 

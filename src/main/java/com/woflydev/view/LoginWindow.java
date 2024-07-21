@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.woflydev.controller.FileUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
@@ -22,10 +26,8 @@ public class LoginWindow extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Main panel for login
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -33,16 +35,13 @@ public class LoginWindow extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // Add logo or title
         JLabel logoLabel = new JLabel("AutoLinkPro", SwingConstants.CENTER);
         logoLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        logoLabel.setForeground(new Color(0, 120, 215)); // Blue color
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         mainPanel.add(logoLabel, gbc);
 
-        // User email
         JLabel userLabel = new JLabel("Email:");
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -57,7 +56,6 @@ public class LoginWindow extends JFrame implements ActionListener {
         gbc.weightx = 1.0;
         mainPanel.add(userField, gbc);
 
-        // Password
         JLabel passLabel = new JLabel("Password:");
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -70,22 +68,16 @@ public class LoginWindow extends JFrame implements ActionListener {
         gbc.gridwidth = 1;
         mainPanel.add(passField, gbc);
 
-        // Buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        buttonPanel.setBackground(Color.WHITE);
 
         loginBtn = new JButton("Login");
         loginBtn.setPreferredSize(new Dimension(100, 30));
-        loginBtn.setBackground(new Color(0, 120, 215));
-        loginBtn.setForeground(Color.WHITE);
         loginBtn.setFocusPainted(false);
         loginBtn.addActionListener(this);
 
         registerBtn = new JButton("Register");
         registerBtn.setPreferredSize(new Dimension(100, 30));
-        registerBtn.setBackground(new Color(0, 120, 215));
-        registerBtn.setForeground(Color.WHITE);
         registerBtn.setFocusPainted(false);
         registerBtn.addActionListener(e -> RegisterWindow.open());
 

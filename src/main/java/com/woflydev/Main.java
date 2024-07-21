@@ -1,6 +1,7 @@
 package com.woflydev;
 
-import com.woflydev.view.HomeWindow;
+import com.formdev.flatlaf.FlatLaf;
+import com.woflydev.themes.AutoLinkTheme;
 import com.woflydev.view.LoginWindow;
 
 public class Main {
@@ -17,6 +18,8 @@ public class Main {
                                                                                                                                         \s"""
         );
 
+        FlatLaf.registerCustomDefaultsSource("themes");
+        AutoLinkTheme.setup();
         LoginWindow.open();
     }
 }

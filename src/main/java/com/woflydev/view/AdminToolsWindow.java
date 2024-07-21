@@ -1,5 +1,6 @@
 package com.woflydev.view;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.view.manage.ManageCarsWindow;
 import com.woflydev.view.manage.ManageCustomersWindow;
@@ -25,7 +26,6 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
         // Main panel for buttons
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -36,7 +36,6 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
         // Heading label
         JLabel headingLabel = new JLabel("Admin Tools", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 3;
@@ -50,14 +49,6 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
         manageCustomersButton.setPreferredSize(new Dimension(200, 40));
         manageStaffButton.setPreferredSize(new Dimension(200, 40));
         manageCarsButton.setPreferredSize(new Dimension(200, 40));
-
-        manageCustomersButton.setBackground(new Color(0, 120, 215));
-        manageStaffButton.setBackground(new Color(0, 120, 215));
-        manageCarsButton.setBackground(new Color(0, 120, 215));
-
-        manageCustomersButton.setForeground(Color.WHITE);
-        manageStaffButton.setForeground(Color.WHITE);
-        manageCarsButton.setForeground(Color.WHITE);
 
         manageCustomersButton.setFocusPainted(false);
         manageStaffButton.setFocusPainted(false);

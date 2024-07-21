@@ -1,5 +1,6 @@
 package com.woflydev.view.createbooking;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import com.woflydev.controller.BookingUtils;
@@ -40,7 +41,6 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
 
     public BookingDetailsWindow(String carId) {
         this.carId = carId;
-
         User c = UserUtils.getUserByEmail(CURRENT_USER_EMAIL);
         String customerName = "";
         String customerEmail = "";
@@ -54,7 +54,6 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         setLayout(new BorderLayout());
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -64,14 +63,12 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         // Heading label
         JLabel headingLabel = new JLabel("Enter Booking Details", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headingLabel.setForeground(new Color(0, 120, 215)); // Blue color
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.weighty = 0.1;
         mainPanel.add(headingLabel, gbc);
 
-        // Customer Name field
         JLabel customerNameLabel = new JLabel("Customer Name:");
         driverNameField = new JTextField(20);
         driverNameField.setText(customerName);
@@ -82,7 +79,6 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.gridx = 1;
         mainPanel.add(driverNameField, gbc);
 
-        // Customer Email field
         JLabel customerEmailLabel = new JLabel("Customer Email:");
         driverEmailField = new JTextField(20);
         driverEmailField.setText(customerEmail);
@@ -92,7 +88,6 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.gridx = 1;
         mainPanel.add(driverEmailField, gbc);
 
-        // Start Date picker
         JLabel startDateLabel = new JLabel("Start Date:");
         startDatePicker = CustomDatePicker.create();
         gbc.gridx = 0;
@@ -101,7 +96,6 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.gridx = 1;
         mainPanel.add(startDatePicker, gbc);
 
-        // Start Time picker
         JLabel startTimeLabel = new JLabel("Start Time:");
         startTimePicker = CustomTimePicker.create();
         gbc.gridx = 0;
@@ -110,7 +104,6 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.gridx = 1;
         mainPanel.add(startTimePicker, gbc);
 
-        // End Date picker
         JLabel endDateLabel = new JLabel("End Date:");
         endDatePicker = CustomDatePicker.create();
         gbc.gridx = 0;
@@ -119,7 +112,6 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.gridx = 1;
         mainPanel.add(endDatePicker, gbc);
 
-        // End Time picker
         JLabel endTimeLabel = new JLabel("End Time:");
         endTimePicker = CustomTimePicker.create();
         gbc.gridx = 0;
@@ -138,20 +130,18 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
 
         confirmButton = new JButton("Confirm Booking");
         confirmButton.setPreferredSize(new Dimension(150, 40));
-        confirmButton.setBackground(new Color(0, 120, 215));
-        confirmButton.setForeground(Color.WHITE);
         confirmButton.setFocusPainted(false);
         confirmButton.addActionListener(this);
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.gridwidth = 2;
-        gbc.weighty = 0.1; // Allow the button to occupy some vertical space
+        gbc.weighty = 0.1;
         gbc.anchor = GridBagConstraints.CENTER;
         mainPanel.add(confirmButton, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
 
-        setSize(500, 600); // Adjusted size for new components
+        setSize(500, 600);
         setLocationRelativeTo(null);
     }
 
