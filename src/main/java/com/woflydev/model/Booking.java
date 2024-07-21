@@ -1,6 +1,7 @@
 package com.woflydev.model;
 
 import com.woflydev.controller.CarUtils;
+import com.woflydev.controller.UserUtils;
 import com.woflydev.model.enums.PaymentMethod;
 
 import java.time.LocalDateTime;
@@ -33,7 +34,7 @@ public class Booking {
     }
 
     public Car getCar() {
-        return CarUtils.getCarById(id);
+        return CarUtils.getCarById(carId);
     }
 
     public String getCarId() {
