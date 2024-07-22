@@ -57,7 +57,7 @@ public class ManageBookingWindow extends JFrame implements ActionListener {
         bookingTable.setRowSorter(rowSorter);
         JScrollPane scrollPane = new JScrollPane(bookingTable);
         gbc.gridx = 0;
-        gbc.gridy = 1; // Adjusted to fit new layout
+        gbc.gridy = 1;
         gbc.gridwidth = 2;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -74,10 +74,6 @@ public class ManageBookingWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // intellij keeps yelling at me if i remove this
-    }
-
-    private void editBooking(String bookingId) {
-        // Implementation unchanged
     }
 
     public void updateTable() {

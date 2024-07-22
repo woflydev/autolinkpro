@@ -33,7 +33,6 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
 
         FileUtils.initializeSystem();
 
-        // Main panel for buttons and table
         JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -41,7 +40,6 @@ public class ManageCarsWindow extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // Heading label
         JLabel headingLabel = new JLabel("Manage Cars", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridx = 0;

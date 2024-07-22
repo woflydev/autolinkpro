@@ -17,7 +17,6 @@ import static com.woflydev.model.Config.*;
 import static com.woflydev.model.Globals.*;
 
 public class UserUtils {
-
     public static boolean authenticate(String email, String password) {
         Owner owner = getOwner();
         Staff staff = getStaffByEmail(email);
@@ -59,11 +58,6 @@ public class UserUtils {
     public static Owner getOwner() { // shorthand
         List<Owner> owners = FileUtils.loadListFromDisk(OWNER_FILE, Owner[].class);
         return (owners != null && !owners.isEmpty()) ? owners.get(0) : null;
-    }
-
-    @FunctionalInterface
-    public interface EmailGetter<T> {
-        String getEmail(T entity);
     }
 
     public static boolean validateRegistration(String firstName, String lastName, String email, String password, String license, LocalDateTime dob) {

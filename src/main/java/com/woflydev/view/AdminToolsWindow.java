@@ -1,6 +1,5 @@
 package com.woflydev.view;
 
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Globals;
@@ -25,7 +24,6 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Main panel for buttons
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -35,7 +33,6 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // Heading label
         JLabel headingLabel = new JLabel("Admin Tools", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridx = 0;
@@ -43,7 +40,6 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
         gbc.gridwidth = 3;
         mainPanel.add(headingLabel, gbc);
 
-        // Create buttons
         manageCustomersButton = new JButton("Manage Customers");
         manageStaffButton = new JButton("Manage Staff");
         manageCarsButton = new JButton("Manage Cars");
@@ -76,7 +72,6 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
         if (UserUtils.hasPrivilege(Globals.CURRENT_USER_EMAIL, Globals.PRIVILEGE_OWNER))
             mainPanel.add(manageCarsButton, gbc);
 
-        // Add panels
         add(mainPanel, BorderLayout.CENTER);
 
         setSize(400, 350);

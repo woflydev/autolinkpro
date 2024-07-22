@@ -5,7 +5,7 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    protected short privilege;  // Use protected to allow access in subclasses or related classes
+    protected short privilege;
 
     public User(String firstName, String lastName, String email, String password, short privilege) {
         this.firstName = firstName;
