@@ -20,7 +20,7 @@ public class Main {
                                                                                                                                         \s"""
         );
 
-        FlatInspector.install( "ctrl shift Y" );
+        FlatInspector.install("ctrl shift Y");
         FlatLaf.registerCustomDefaultsSource("themes");
         AutoLinkTheme.setup();
         LoginWindow.open();
