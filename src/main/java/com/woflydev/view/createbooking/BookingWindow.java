@@ -31,6 +31,9 @@ public class BookingWindow extends JFrame implements ActionListener {
         setTitle("New Booking");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
+        setResizable(false);
+        setSize(700, 500);
+        setLocationRelativeTo(null);
 
         FileUtils.initializeSystem();
 
@@ -84,9 +87,6 @@ public class BookingWindow extends JFrame implements ActionListener {
         updateTable();
 
         add(mainPanel, BorderLayout.CENTER);
-
-        setSize(700, 500);
-        setLocationRelativeTo(null);
     }
 
     @Override

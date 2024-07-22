@@ -7,26 +7,37 @@ import java.time.LocalTime;
 
 import static javax.swing.SwingConstants.HORIZONTAL;
 
+/**
+ * Custom wrapper for DJ-Raven's TimePicker.
+ * Offers much needed quality-of-life improvements, such as the ability to actually get the time.
+ * @author woflydev
+ */
 public class CustomTimePicker extends TimePicker {
+    private LocalTime currentSelectedTime;
+
     /**
      * Creates a JFormattedTextField, attaches the TimePicker, and applies TimePicker defaults.
+     * <p>
+     * For SOME REASON, the method getSelectedDate/getSelectedTime only fires when a selection is made, and
+     * then just drops the value. And so I had to wrap it with getDate/getTime to store persistently.
      * @return A JFormattedTextField on which the TimePicker has been attached.
      */
-    public JFormattedTextField create() {
+    public JFormattedTextField createParent() {
         LocalTime defaultTime = LocalTime.now().withSecond(0).withNano(0).plusMinutes(65);
 
-        TimePicker tp = new TimePicker();
         JFormattedTextField ftf = new JFormattedTextField();
-        tp.setEditor(ftf);
+        setEditor(ftf);
 
-        tp.setOrientation(HORIZONTAL);
-        tp.setSelectedTime(defaultTime);
-        tp.set24HourView(true);
+        setOrientation(HORIZONTAL);
+        setSelectedTime(defaultTime);
+        set24HourView(true);
+
+        // WHY DOESN'T THE METHOD DO WHAT IT SAYS IT DOES
+        addTimeSelectionListener(timeEvent -> currentSelectedTime = getSelectedTime());
 
         return ftf;
     }
 
-    public LocalTime getTime() {
-        return getSelectedTime();
-    }
+    public LocalTime getTime() { return currentSelectedTime; }
+    public void setTime(LocalTime time) { currentSelectedTime = time; setSelectedTime(time); }
 }

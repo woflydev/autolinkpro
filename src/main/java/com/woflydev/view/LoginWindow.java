@@ -73,7 +73,6 @@ public class LoginWindow extends JFrame implements ActionListener {
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         loginBtn = new JButton("Login");
-        System.out.println(loginBtn.getClientProperty("Button.foreground"));
         loginBtn.setPreferredSize(new Dimension(100, 30));
         loginBtn.setFocusPainted(false);
         loginBtn.addActionListener(this);

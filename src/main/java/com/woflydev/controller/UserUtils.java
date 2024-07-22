@@ -33,12 +33,12 @@ public class UserUtils {
 
     public static boolean hasPrivilege(String email, short requiredPrivilege) {
         if (getOwner() != null && getOwner().getEmail().equals(email))
-            return true; // Owner has the highest privilege
+            return true; // owner has the highest privilege
         else if (getStaffByEmail(email) != null && getStaffByEmail(email).getEmail().equals(email))
-            return getStaffByEmail(email).getPrivilege() < requiredPrivilege;
+            return getStaffByEmail(email).getPrivilege() <= requiredPrivilege;
 
         Customer customer = getCustomerByEmail(email);
-        return customer != null && customer.getPrivilege() < requiredPrivilege;
+        return customer != null && customer.getPrivilege() <= requiredPrivilege;
     }
 
     public static List<Staff> getStaffList() { return getEntityList(STAFF_FILE, Staff[].class); }

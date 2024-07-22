@@ -100,11 +100,10 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
         JSpinner dobSpinner = new JSpinner(dateModel);
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dobSpinner, "yyyy-MM-dd");
         dobSpinner.setEditor(dateEditor);
-        dobSpinner.setValue(new Date()); // sets the initial value
+        dobSpinner.setValue(new Date());
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -223,7 +222,6 @@ public class ManageCustomersWindow extends JFrame implements ActionListener {
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel.setBackground(Color.WHITE);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);

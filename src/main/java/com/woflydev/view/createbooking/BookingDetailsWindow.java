@@ -27,15 +27,17 @@ import static com.woflydev.model.Globals.CURRENT_USER_EMAIL;
 public class BookingDetailsWindow extends JFrame implements ActionListener {
     public static BookingDetailsWindow instance = null;
 
-    private JTextField driverNameField;
-    private JTextField driverEmailField;
-    private CustomDatePicker startDatePicker;
-    private CustomTimePicker startTimePicker;
-    private CustomDatePicker endDatePicker;
-    private CustomTimePicker endTimePicker;
-    private JButton confirmButton;
-    private JComboBox<PaymentMethod> paymentMethodComboBox; // Updated to use PaymentMethod enum
+    protected JTextField driverNameField;
+    protected JTextField driverEmailField;
+    protected CustomDatePicker startDatePicker;
+    protected CustomTimePicker startTimePicker;
+    protected CustomDatePicker endDatePicker;
+    protected CustomTimePicker endTimePicker;
+    protected JComboBox<PaymentMethod> paymentMethodComboBox; // Updated to use PaymentMethod enum
     private String carId;
+    private JButton confirmButton;
+
+    protected JLabel headingLabel;
 
     public BookingDetailsWindow(String carId) {
         this.carId = carId;
@@ -58,8 +60,7 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
-        // Heading label
-        JLabel headingLabel = new JLabel("Enter Booking Details", SwingConstants.CENTER);
+        headingLabel = new JLabel("Enter Booking Details", SwingConstants.CENTER);
         headingLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -67,22 +68,22 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.weighty = 0.1;
         mainPanel.add(headingLabel, gbc);
 
-        JLabel customerNameLabel = new JLabel("Customer Name:");
+        JLabel driverNameLabel = new JLabel("Driver Name:");
         driverNameField = new JTextField(20);
         driverNameField.setText(customerName);
         gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy = 1;
-        mainPanel.add(customerNameLabel, gbc);
+        mainPanel.add(driverNameLabel, gbc);
         gbc.gridx = 1;
         mainPanel.add(driverNameField, gbc);
 
-        JLabel customerEmailLabel = new JLabel("Customer Email:");
+        JLabel driverEmailLabel = new JLabel("Driver Email:");
         driverEmailField = new JTextField(20);
         driverEmailField.setText(customerEmail);
         gbc.gridx = 0;
         gbc.gridy = 2;
-        mainPanel.add(customerEmailLabel, gbc);
+        mainPanel.add(driverEmailLabel, gbc);
         gbc.gridx = 1;
         mainPanel.add(driverEmailField, gbc);
 
@@ -92,7 +93,7 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.gridy = 3;
         mainPanel.add(startDateLabel, gbc);
         gbc.gridx = 1;
-        mainPanel.add(startDatePicker.create(), gbc);
+        mainPanel.add(startDatePicker.createParent(), gbc);
 
         JLabel startTimeLabel = new JLabel("Start Time:");
         startTimePicker = new CustomTimePicker();
@@ -100,7 +101,7 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.gridy = 4;
         mainPanel.add(startTimeLabel, gbc);
         gbc.gridx = 1;
-        mainPanel.add(startTimePicker.create(), gbc);
+        mainPanel.add(startTimePicker.createParent(), gbc);
 
         JLabel endDateLabel = new JLabel("End Date:");
         endDatePicker = new CustomDatePicker() ;
@@ -108,7 +109,7 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.gridy = 5;
         mainPanel.add(endDateLabel, gbc);
         gbc.gridx = 1;
-        mainPanel.add(endDatePicker.create(), gbc);
+        mainPanel.add(endDatePicker.createParent(), gbc);
 
         JLabel endTimeLabel = new JLabel("End Time:");
         endTimePicker = new CustomTimePicker();
@@ -116,7 +117,7 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         gbc.gridy = 6;
         mainPanel.add(endTimeLabel, gbc);
         gbc.gridx = 1;
-        mainPanel.add(endTimePicker.create(), gbc);
+        mainPanel.add(endTimePicker.createParent(), gbc);
 
         JLabel paymentMethodLabel = new JLabel("Payment Method:");
         paymentMethodComboBox = new JComboBox<>(PaymentMethod.values()); // Use enum values
@@ -151,26 +152,36 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         }
     }
 
+    String driverName;
+    String driverEmail;
+    LocalDate startDate;
+    LocalTime startTime;
+    LocalDate endDate;
+    LocalTime endTime;
+    LocalDateTime startDateTime;
+    LocalDateTime endDateTime;
+    PaymentMethod paymentMethod;
     private void confirmBooking() {
-        String driverName = driverNameField.getText();
-        String driverEmail = driverEmailField.getText();
-        LocalDate startDate = startDatePicker.getDate();
-        LocalTime startTime = startTimePicker.getTime();
-        LocalDate endDate = endDatePicker.getDate();
-        LocalTime endTime = endTimePicker.getTime();
-        PaymentMethod paymentMethod = (PaymentMethod) paymentMethodComboBox.getSelectedItem();
+        driverName = driverNameField.getText();
+        driverEmail = driverEmailField.getText();
+        startDate = startDatePicker.getDate();
+        startTime = startTimePicker.getTime();
+        endDate = endDatePicker.getDate();
+        endTime = endTimePicker.getTime();
+        paymentMethod = (PaymentMethod) paymentMethodComboBox.getSelectedItem();
 
-        if (!BookingUtils.hasExceededMaximumBookings()) {
+        if (BookingUtils.hasExceededMaximumBookings()) {
             WindowUtils.errorBox("You can only make a maximum of " + Config.MAX_CONCURRENT_BOOKINGS + " concurrent bookings.");
             return;
         }
+
         if (driverName.isEmpty() || driverEmail.isEmpty() || startDate == null || startTime == null || endDate == null || endTime == null || paymentMethod == null) {
             WindowUtils.errorBox("All fields must be filled out.");
             return;
         }
 
-        LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
-        LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
+        startDateTime = LocalDateTime.of(startDate, startTime);
+        endDateTime = LocalDateTime.of(endDate, endTime);
         LocalDateTime minThresh = LocalDateTime.now().plusHours(1);
 
         if (endDateTime.isBefore(startDateTime)) {
@@ -182,14 +193,15 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
             return;
         }
 
-        if (BookingUtils.hasClash(carId, startDateTime, endDateTime)) {
-            LocalDateTime next = BookingUtils.nextAvailable(carId, endDateTime);
+        if (checkHasClash(startDateTime, endDateTime)) {
+            LocalDateTime next = BookingUtils.nextAvailable(carId, startDateTime, endDateTime);
+            assert next != null;
             String date = next.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             String time = next.format(DateTimeFormatter.ofPattern("HH:mm"));
             String errorMessage = String.format(
                     """
                             This car is already booked during the selected time period.
-                            The next available time is: %s, at %s."""
+                            The next available start time given your selected length is %s, at %s."""
                     , date, time
             );
             WindowUtils.errorBox(errorMessage);
@@ -207,9 +219,19 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
                 paymentMethod
         );
 
-        BookingUtils.addBooking(newBooking);
+        processBooking(newBooking);
         BookingConfirmationWindow.open(newBooking);
         dispose();
+    }
+
+    // overridden in EditBookingWindow for updating the booking instead of creating a new one
+    protected void processBooking(Booking newBooking) {
+        BookingUtils.addBooking(newBooking);
+    }
+
+    // also overridden
+    protected boolean checkHasClash(LocalDateTime start, LocalDateTime end) {
+        return BookingUtils.hasClash(carId, "0", start, end);
     }
 
     public static void open(String carId) {

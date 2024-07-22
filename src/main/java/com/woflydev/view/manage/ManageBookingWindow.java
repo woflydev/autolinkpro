@@ -19,8 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class ManageBookingsWindow extends JFrame implements ActionListener {
-    public static ManageBookingsWindow instance = null;
+public class ManageBookingWindow extends JFrame implements ActionListener {
+    public static ManageBookingWindow instance = null;
 
     private CustomJTable bookingTable;
     private NonEditableTableModel tableModel;
@@ -28,7 +28,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
 
     private String[] columnNames = {"ID", "Car Make", "Car Model", "Driver", "Start Date", "End Date", "Actions"};
 
-    public ManageBookingsWindow() {
+    public ManageBookingWindow() {
         setTitle("Manage Bookings");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -80,7 +80,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
         // Implementation unchanged
     }
 
-    private void updateTable() {
+    public void updateTable() {
         List<Booking> bookings = BookingUtils.getBookingList();
         Object[][] data;
 
@@ -126,7 +126,8 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
                             () -> {
                                 int row = bookingTable.getSelectedRow();
                                 String id = (String) tableModel.getValueAt(row, 0);
-                                editBooking(id);
+                                EditBookingWindow.open(id);
+                                updateTable();
                             },
                             () -> {
                                 int row = bookingTable.getSelectedRow();
@@ -140,7 +141,7 @@ public class ManageBookingsWindow extends JFrame implements ActionListener {
 
     public static void open() {
         if (instance == null) {
-            instance = new ManageBookingsWindow();
+            instance = new ManageBookingWindow();
             WindowUtils.register(instance);
         }
     }

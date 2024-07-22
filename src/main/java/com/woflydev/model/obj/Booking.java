@@ -74,7 +74,7 @@ public class Booking {
         return startDateTime;
     }
 
-    public void setStartDateTime(LocalDateTime startDateTime) {
+    public void setStart(LocalDateTime startDateTime) {
         this.startDateTime = startDateTime;
     }
 
@@ -82,7 +82,7 @@ public class Booking {
         return endDateTime;
     }
 
-    public void setEndDateTime(LocalDateTime endDateTime) {
+    public void setEnd(LocalDateTime endDateTime) {
         this.endDateTime = endDateTime;
     }
 

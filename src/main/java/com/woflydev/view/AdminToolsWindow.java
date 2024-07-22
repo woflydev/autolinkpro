@@ -1,7 +1,9 @@
 package com.woflydev.view;
 
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
+import com.woflydev.model.Globals;
 import com.woflydev.view.manage.ManageCarsWindow;
 import com.woflydev.view.manage.ManageCustomersWindow;
 import com.woflydev.view.manage.ManageStaffWindow;
@@ -64,11 +66,15 @@ public class AdminToolsWindow extends JFrame implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        mainPanel.add(manageStaffButton, gbc);
+
+        if (UserUtils.hasPrivilege(Globals.CURRENT_USER_EMAIL, Globals.PRIVILEGE_OWNER))
+            mainPanel.add(manageStaffButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        mainPanel.add(manageCarsButton, gbc);
+
+        if (UserUtils.hasPrivilege(Globals.CURRENT_USER_EMAIL, Globals.PRIVILEGE_OWNER))
+            mainPanel.add(manageCarsButton, gbc);
 
         // Add panels
         add(mainPanel, BorderLayout.CENTER);

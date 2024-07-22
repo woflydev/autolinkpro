@@ -1,22 +1,16 @@
 package com.woflydev.view;
 
-import com.formdev.flatlaf.FlatClientProperties;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
-import com.formdev.flatlaf.extras.components.FlatButton;
-import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.StyleUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Globals;
 import com.woflydev.view.createbooking.BookingWindow;
-import com.woflydev.view.manage.ManageBookingsWindow;
+import com.woflydev.view.manage.ManageBookingWindow;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
 import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.WARNING;
 import static com.woflydev.model.Globals.PRIVILEGE_STAFF;
 import static com.woflydev.controller.UserUtils.hasPrivilege;
@@ -135,7 +129,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         if (e.getSource() == createBookingButton) {
             BookingWindow.open();
         } else if (e.getSource() == manageBookingsButton) {
-            ManageBookingsWindow.open();
+            ManageBookingWindow.open();
         } else if (e.getSource() == settingsButton) {
             System.out.println("Settings button clicked");
         } else if (e.getSource() == adminButton) {
