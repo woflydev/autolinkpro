@@ -56,6 +56,32 @@
             <version>24.1.0</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.7.1</version>
+        </dependency>
     </dependencies>
 
+    <!-- oh my god you do not know how long i spent wrangling with Maven to get the dependencies to work -->
+    <!-- genuinely the most cancerous thing I've ever done in IntelliJ -->
+    <!-- run `mvn clean compile assembly:single` to produce a .jar -->
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.woflydev.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

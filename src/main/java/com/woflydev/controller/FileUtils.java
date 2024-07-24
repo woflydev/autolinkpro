@@ -68,7 +68,7 @@ public class FileUtils {
         if (!carsFile.exists()) {
             System.out.println("Initializing cars file...");
             List<Car> cars = new ArrayList<>();
-            saveToDisk(cars, "cars.json");
+            saveToDisk(cars, CARS_FILE);
         }
     }
 

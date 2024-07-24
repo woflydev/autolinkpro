@@ -2,7 +2,6 @@ package com.woflydev;
 
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.extras.FlatInspector;
-import com.formdev.flatlaf.extras.FlatUIDefaultsInspector;
 import com.woflydev.themes.AutoLinkTheme;
 import com.woflydev.view.LoginWindow;
 
