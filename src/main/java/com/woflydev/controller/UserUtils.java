@@ -65,8 +65,6 @@ public class UserUtils {
         if (!isValidEmail(email)) { WindowUtils.errorBox("Invalid email format."); return false; }
         if (getUserByEmail(email) != null) { WindowUtils.errorBox("An account with this email already exists."); return false; }
         if (password.length() < 6) { WindowUtils.errorBox("Password must be at least 6 characters long."); return false; }
-
-        System.out.println(!license.matches("^[0-9]+$"));
         if (license.length() > 11 || license.length() < 10 || !license.matches("^[0-9]+$")) { WindowUtils.errorBox("Invalid license number."); return false; }
         if (dob.isAfter(LocalDateTime.now().minusYears(18))) { WindowUtils.errorBox("You must be at least 18 years old to register."); return false; }
 
@@ -75,8 +73,9 @@ public class UserUtils {
 
     private static boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
+        return Pattern
+                .compile(emailRegex)
+                .matcher(email)
+                .matches();
     }
 }

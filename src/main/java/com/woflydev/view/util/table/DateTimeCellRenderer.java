@@ -27,7 +27,7 @@ public class DateTimeCellRenderer extends JLabel implements TableCellRenderer {
         if (value instanceof LocalDateTime dateTime) {
             String date = dateTime.format(dateFormatter);
             String time = dateTime.format(timeFormatter);
-            setText(String.format("<html>Date: %s<br>Time: %s</html>", date, time));
+            setText(String.format("<html>Date: <b>%s</b><br>Time: <b>%s</b></html>", date, time));
         } else {
             setText(value.toString());
         }

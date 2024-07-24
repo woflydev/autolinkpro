@@ -1,9 +1,10 @@
 package com.woflydev.controller;
 
+import com.woflydev.model.Config;
 import com.woflydev.model.obj.Booking;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static com.woflydev.model.Globals.*;
@@ -26,6 +27,10 @@ public class BookingUtils {
     public static void deleteBooking(Booking booking) { FileUtils.deleteEntity(BOOKINGS_FILE, Booking[].class, booking.getId(), Booking::getId); }
 
     // -------------------------------------------------------------------------------- \\
+
+    public static boolean exceedsMaximumTime(LocalDateTime start, LocalDateTime end) {
+        return start.until(end, ChronoUnit.DAYS) > MAX_BOOKING_DAYS;
+    }
 
     public static boolean hasExceededMaximumBookings() {
         short count = 0;

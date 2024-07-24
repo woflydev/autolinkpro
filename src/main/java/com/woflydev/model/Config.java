@@ -10,6 +10,7 @@ public class Config {
     public static final String CARS_FILE = SYSTEM_DIR + "cars.json";
     public static final String BOOKINGS_FILE = SYSTEM_DIR + "bookings.json";
 
+    public static final short MAX_BOOKING_DAYS = 7;
     public static final short MAX_CONCURRENT_BOOKINGS = 3;
     public static final short TURNOVER_TIME = 60; // in minutes
 }

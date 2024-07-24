@@ -15,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -170,11 +171,7 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         endTime = endTimePicker.getTime();
         paymentMethod = (PaymentMethod) paymentMethodComboBox.getSelectedItem();
 
-        if (BookingUtils.hasExceededMaximumBookings()) {
-            WindowUtils.errorBox("You can only make a maximum of " + Config.MAX_CONCURRENT_BOOKINGS + " concurrent bookings.");
-            return;
-        }
-
+        if (BookingUtils.hasExceededMaximumBookings()) { WindowUtils.errorBox("You can only make a maximum of " + Config.MAX_CONCURRENT_BOOKINGS + " concurrent bookings."); return; }
         if (driverName.isEmpty() || driverEmail.isEmpty() || startDate == null || startTime == null || endDate == null || endTime == null || paymentMethod == null) {
             WindowUtils.errorBox("All fields must be filled out.");
             return;
@@ -184,14 +181,9 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         endDateTime = LocalDateTime.of(endDate, endTime);
         LocalDateTime minThresh = LocalDateTime.now().plusHours(1);
 
-        if (endDateTime.isBefore(startDateTime)) {
-            WindowUtils.errorBox("You can't rent a car for negative time!");
-            return;
-        }
-        if (startDateTime.isBefore(minThresh)) {
-            WindowUtils.errorBox("Start time must be at least an hour after now.");
-            return;
-        }
+        if (endDateTime.isBefore(startDateTime)) { WindowUtils.errorBox("You can't rent a car for negative time!"); return; }
+        if (startDateTime.isBefore(minThresh)) { WindowUtils.errorBox("Start time must be at least an hour after now."); return; }
+        if (BookingUtils.exceedsMaximumTime(startDateTime, endDateTime)) { WindowUtils.errorBox("The maximum booking period is " + Config.MAX_BOOKING_DAYS + " days."); return; }
 
         if (checkHasClash(startDateTime, endDateTime)) {
             LocalDateTime next = BookingUtils.nextAvailable(carId, startDateTime, endDateTime);

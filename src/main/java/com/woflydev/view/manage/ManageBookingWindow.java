@@ -33,6 +33,8 @@ public class ManageBookingWindow extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
         setResizable(false);
+        setSize(900, 500);
+        setLocationRelativeTo(null);
 
         FileUtils.initializeSystem();
 
@@ -66,9 +68,6 @@ public class ManageBookingWindow extends JFrame implements ActionListener {
         updateTable();
 
         add(mainPanel, BorderLayout.CENTER);
-
-        setSize(800, 400);
-        setLocationRelativeTo(null);
     }
 
     @Override
