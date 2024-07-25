@@ -1,4 +1,4 @@
-package com.woflydev.controller;
+package com.woflydev.filesystemdemo;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.woflydev.model.Config.*;
+import static com.woflydev.filesystemdemo.Config.*;
 
 /**
  * A class that provides generic utility methods for working with files and JSON data.
@@ -30,6 +30,7 @@ public class FileUtils {
     private static final Gson gson;
 
     static {
+        System.out.println("AutolinkFiler v" + Globals.VERSION);
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .create();
