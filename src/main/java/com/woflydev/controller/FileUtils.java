@@ -108,12 +108,9 @@ public class FileUtils {
         try (Reader reader = new FileReader(filename)) {
             Type listType = TypeToken.getParameterized(List.class, clazz.getComponentType()).getType();
             return gson.fromJson(reader, listType);
-        } catch (FileNotFoundException e) {
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
+        catch (FileNotFoundException e) { return null; }
+        catch (IOException e) { e.printStackTrace(); return null; }
     }
 
     // entity interaction with filesystem ---------------------------------------------- \\
