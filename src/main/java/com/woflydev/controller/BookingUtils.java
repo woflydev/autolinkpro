@@ -12,6 +12,9 @@ import static com.woflydev.model.Config.*;
 
 public class BookingUtils {
 
+    /**
+     * All the following methods are wrappers for FileUtils methods
+     */
     public static List<Booking> getBookingList() { return FileUtils.getEntityList(BOOKINGS_FILE, Booking[].class); }
     public static Booking getBookingById(String bookingId) {
         return getBookingList().stream()
@@ -28,10 +31,22 @@ public class BookingUtils {
 
     // -------------------------------------------------------------------------------- \\
 
+    /**
+     * This method returns a boolean based on whether the proposed booking exceeds the maximum time, as defined in Config.java.
+     * Also prevents people like Sid from booking a car for 47 years.
+     * @param start
+     * @param end
+     * @return
+     */
     public static boolean exceedsMaximumTime(LocalDateTime start, LocalDateTime end) {
         return start.until(end, ChronoUnit.DAYS) > MAX_BOOKING_DAYS;
     }
 
+    /**
+     * Ensures that a user doesn't have 80 concurrent bookings on file.
+     * Maximum is defined in Config.java.
+     * @return boolean
+     */
     public static boolean hasExceededMaximumBookings() {
         short count = 0;
         for (Booking booking : getBookingList()) {
@@ -49,7 +64,13 @@ public class BookingUtils {
         return getClashBookingId(carId, bookingId, newStart, newEnd) != null;
     }
 
-    public static LocalDateTime nextAvailable(String carId, LocalDateTime newStart, LocalDateTime newEnd) {
+    /**
+     * When a clash is found, this method returns the next available slot given the proposed start time.
+     * @param carId
+     * @param newStart
+     * @param newEnd
+     */
+    public static LocalDateTime nextAvailable(String carId, LocalDateTime newStart) {
         List<Booking> bookings = getBookingList();
 
         LocalDateTime nextAvailableTime = newStart;

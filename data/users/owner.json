@@ -1,8 +1,1 @@
-[
-  {
-    "email": "admin",
-    "firstName": "Admin",
-    "lastName": "User",
-    "password": "$2a$12$uGKK4X5Bqjdwi4waYFMvleOfm5tNfrc3ozf9hePf7DmxLAmIhKzkO",
-    "privilege": 0
-  }]
+[{"firstName":"Admin","lastName":"User","email":"admin","password":"$2a$12$ejQH1xWcSZ3UFjCrrxILf.xZ1HZYck4PKV9nP8rI8.tVlja9Pjd16","privilege":0}]

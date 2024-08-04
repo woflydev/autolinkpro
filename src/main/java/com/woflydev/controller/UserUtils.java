@@ -30,6 +30,29 @@ public class UserUtils {
         return customer != null && BCryptHash.verifyHash(password, customer.getPassword());
     }
 
+    public static void updatePassword(String email, String newPassword) {
+        Owner owner = getOwner();
+        if (owner != null && owner.getEmail().equals(email)) {
+            owner.setPassword(BCryptHash.hashString(newPassword));
+            updateOwner(owner);
+            return;
+        }
+
+        Staff staff = getStaffByEmail(email);
+        if (staff != null) {
+            staff.setPassword(BCryptHash.hashString(newPassword));
+            updateStaff(staff);
+            return;
+        }
+
+        Customer customer = getCustomerByEmail(email);
+        if (customer != null) {
+            customer.setPassword(BCryptHash.hashString(newPassword));
+            updateCustomer(customer);
+        }
+    }
+
+
     public static boolean hasPrivilege(String email, short requiredPrivilege) {
         if (getOwner() != null && getOwner().getEmail().equals(email))
             return true; // owner has the highest privilege
@@ -52,6 +75,7 @@ public class UserUtils {
     public static void deleteStaff(String email) { deleteEntity(STAFF_FILE, Staff[].class, email, Staff::getEmail); }
     public static void deleteCustomer(String email) { deleteEntity(CUSTOMERS_FILE, Customer[].class, email, Customer::getEmail); }
 
+    public static void updateOwner(Owner owner) { updateEntity(OWNER_FILE, Owner[].class, owner, Owner::getEmail); }
     public static void updateStaff(Staff updatedStaff) { updateEntity(STAFF_FILE, Staff[].class, updatedStaff, Staff::getEmail); }
     public static void updateCustomer(Customer updatedCustomer) { updateEntity(CUSTOMERS_FILE, Customer[].class, updatedCustomer, Customer::getEmail); }
 

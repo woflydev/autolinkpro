@@ -186,7 +186,7 @@ public class BookingDetailsWindow extends JFrame implements ActionListener {
         if (BookingUtils.exceedsMaximumTime(startDateTime, endDateTime)) { WindowUtils.errorBox("The maximum booking period is " + Config.MAX_BOOKING_DAYS + " days."); return; }
 
         if (checkHasClash(startDateTime, endDateTime)) {
-            LocalDateTime next = BookingUtils.nextAvailable(carId, startDateTime, endDateTime);
+            LocalDateTime next = BookingUtils.nextAvailable(carId, startDateTime);
             assert next != null;
             String date = next.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             String time = next.format(DateTimeFormatter.ofPattern("HH:mm"));
