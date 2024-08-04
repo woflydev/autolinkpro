@@ -75,6 +75,7 @@ public class ManageBookingWindow extends JFrame implements ActionListener {
         // intellij keeps yelling at me if i remove this
     }
 
+    // this method is called every table refresh, to populate cells
     public void updateTable() {
         List<Booking> bookings = BookingUtils.getBookingList();
         Object[][] data;
@@ -82,13 +83,7 @@ public class ManageBookingWindow extends JFrame implements ActionListener {
         if (UserUtils.hasPrivilege(Globals.CURRENT_USER_EMAIL, Globals.PRIVILEGE_STAFF)) {
             data = new Object[bookings.size()][7];
             for (int i = 0; i < bookings.size(); i++) {
-                Booking booking = bookings.get(i);
-                data[i][0] = booking.getId();
-                data[i][1] = booking.getCar().getMake();
-                data[i][2] = booking.getCar().getModel();
-                data[i][3] = booking.getDriverFullName();
-                data[i][4] = booking.getStart();
-                data[i][5] = booking.getEnd();
+                populateCell(bookings, data, i);
                 data[i][6] = "Edit/Delete";
             }
         } else {
@@ -98,13 +93,7 @@ public class ManageBookingWindow extends JFrame implements ActionListener {
 
             data = new Object[customerBookings.size()][7];
             for (int i = 0; i < customerBookings.size(); i++) {
-                Booking booking = customerBookings.get(i);
-                data[i][0] = booking.getId();
-                data[i][1] = booking.getCar().getMake();
-                data[i][2] = booking.getCar().getModel();
-                data[i][3] = booking.getDriverFullName();
-                data[i][4] = booking.getStart();
-                data[i][5] = booking.getEnd();
+                populateCell(customerBookings, data, i);
                 data[i][6] = "";
             }
         }
@@ -132,6 +121,17 @@ public class ManageBookingWindow extends JFrame implements ActionListener {
                             }
                     }));
         }
+    }
+
+    // this method fills data for individual cells
+    private void populateCell(List<Booking> bookings, Object[][] data, int i) {
+        Booking booking = bookings.get(i);
+        data[i][0] = booking.getId();
+        data[i][1] = booking.getCar().getMake();
+        data[i][2] = booking.getCar().getModel();
+        data[i][3] = booking.getDriverFullName();
+        data[i][4] = booking.getStart();
+        data[i][5] = booking.getEnd();
     }
 
     public static void open() {

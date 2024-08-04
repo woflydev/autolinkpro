@@ -75,10 +75,8 @@ public class BookingUtils {
 
         for (Booking booking : bookings) {
             if (booking.getCarId().equals(carId) && !booking.getId().equals(bookingId)) {
-                LocalDateTime existingStart = booking.getStart();
-                LocalDateTime existingEnd = booking.getEnd();
-                LocalDateTime adjustedExistingStart = existingStart.minusMinutes(TURNOVER_TIME);
-                LocalDateTime adjustedExistingEnd = existingEnd.plusMinutes(TURNOVER_TIME);
+                LocalDateTime adjustedExistingStart = booking.getStart().minusMinutes(TURNOVER_TIME);
+                LocalDateTime adjustedExistingEnd = booking.getEnd().plusMinutes(TURNOVER_TIME);
 
                 // if any of the new time overlaps with an existing booking,
                 // then there is a clash

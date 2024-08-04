@@ -132,13 +132,9 @@ public class BookingWindow extends JFrame implements ActionListener {
         RowFilter<DefaultTableModel, Object> searchFilter = RowFilter.regexFilter("(?i)" + searchText, 1, 2);
         RowFilter<DefaultTableModel, Object> filter;
 
-        if ("Make".equals(selectedFilter)) {
-            filter = RowFilter.regexFilter("(?i)" + searchText, 1);
-        } else if ("Model".equals(selectedFilter)) {
-            filter = RowFilter.regexFilter("(?i)" + searchText, 2);
-        } else {
-            filter = RowFilter.regexFilter(".*", 1, 2);
-        }
+        if ("Make".equals(selectedFilter)) filter = RowFilter.regexFilter("(?i)" + searchText, 1);
+        else if ("Model".equals(selectedFilter)) filter = RowFilter.regexFilter("(?i)" + searchText, 2);
+        else filter = RowFilter.regexFilter(".*", 1, 2);
 
         RowFilter<DefaultTableModel, Object> combinedFilter = RowFilter.andFilter(List.of(searchFilter, filter));
         rowSorter.setRowFilter(combinedFilter);

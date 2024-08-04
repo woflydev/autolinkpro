@@ -23,14 +23,18 @@ public class DateTimeCellRenderer extends JLabel implements TableCellRenderer {
     }
 
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+    public Component getTableCellRendererComponent(
+            JTable table,
+            Object value,
+            boolean isSelected,
+            boolean hasFocus,
+            int row, int column
+    ) {
         if (value instanceof LocalDateTime dateTime) {
             String date = dateTime.format(dateFormatter);
             String time = dateTime.format(timeFormatter);
             setText(String.format("<html>Date: <b>%s</b><br>Time: <b>%s</b></html>", date, time));
-        } else {
-            setText(value.toString());
-        }
+        } else setText(value.toString());
         if (isSelected) {
             setBackground(table.getSelectionBackground());
             setForeground(table.getSelectionForeground());
