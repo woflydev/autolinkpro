@@ -6,6 +6,7 @@ import javax.swing.table.TableModel;
 /**
  * A custom wrapper for the JTable class, automatically applying the BorderlessTableRenderer for a seamless
  * user experience.
+ * @author woflydev
  */
 public class CustomJTable extends JTable {
     public CustomJTable(TableModel tableModel) {

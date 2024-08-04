@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Custom formatting for putting date-times into table cells.
+ * @author woflydev
  */
 public class DateTimeCellRenderer extends JLabel implements TableCellRenderer {
 

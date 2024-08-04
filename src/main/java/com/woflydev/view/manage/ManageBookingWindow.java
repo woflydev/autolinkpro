@@ -19,6 +19,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * This class lists all current bookings in an interactive table.
+ * @author woflydev
+ */
 public class ManageBookingWindow extends JFrame implements ActionListener {
     public static ManageBookingWindow instance = null;
 

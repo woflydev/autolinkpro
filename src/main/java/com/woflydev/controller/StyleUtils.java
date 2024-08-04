@@ -2,6 +2,12 @@ package com.woflydev.controller;
 
 import javax.swing.*;
 
+/**
+ * A collection of utility methods for applying styles to components.
+ * Integrates directly with FlatLaf's CSS class support.
+ * See <a href="https://github.com/JFormDesigner/FlatLaf">FlatLaf Documentation</a> for detailed information.
+ * @author woflydev
+ */
 public class StyleUtils {
     public enum BUTTON_STYLES {
         PRIMARY,

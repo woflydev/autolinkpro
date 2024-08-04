@@ -19,6 +19,10 @@ import java.util.UUID;
 
 import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
 
+/**
+ * This class lists all current cars in an interactive table.
+ * @author woflydev
+ */
 public class ManageCarsWindow extends JFrame implements ActionListener {
     public static ManageCarsWindow instance = null;
 

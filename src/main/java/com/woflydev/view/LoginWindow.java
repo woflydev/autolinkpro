@@ -10,6 +10,10 @@ import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.Globals;
 
+/**
+ * First window that is visible to the user on startup.
+ * @author woflydev
+ */
 public class LoginWindow extends JFrame implements ActionListener {
     private static LoginWindow instance = null;
 

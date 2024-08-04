@@ -5,6 +5,10 @@ import com.formdev.flatlaf.extras.FlatInspector;
 import com.woflydev.themes.AutoLinkTheme;
 import com.woflydev.view.LoginWindow;
 
+/**
+ * Main entrypoint of the application.
+ * @author woflydev
+ */
 public class Main {
     public static void main(String[] args) {
         System.out.println(
@@ -19,9 +23,17 @@ public class Main {
                                                                                                                                         \s"""
         );
 
+        /*
+         * First loads the FlatLaf Component Inspector, then the AutoLinkTheme.
+         * The AutoLinkTheme properties are stored under the resources folder, in ./resources/themes.
+         */
         FlatInspector.install("ctrl shift I");
         FlatLaf.registerCustomDefaultsSource("themes");
         AutoLinkTheme.setup();
+
+        /*
+         * Launches LoginWindow, which prompts for user credentials.
+         */
         LoginWindow.open();
     }
 }

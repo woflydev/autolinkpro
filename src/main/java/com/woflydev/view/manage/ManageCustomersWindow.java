@@ -22,6 +22,10 @@ import java.util.List;
 
 import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
 
+/**
+ * This class lists all current customers in an interactive table.
+ * @author woflydev
+ */
 public class ManageCustomersWindow extends JFrame implements ActionListener {
     public static ManageCustomersWindow instance = null;
 

@@ -17,6 +17,12 @@ import static com.woflydev.model.Config.*;
 import static com.woflydev.model.Globals.*;
 
 public class UserUtils {
+    /**
+     * Returns true if the provided credentials are valid with stored records.
+     * @param email
+     * @param password
+     * @return
+     */
     public static boolean authenticate(String email, String password) {
         Owner owner = getOwner();
         Staff staff = getStaffByEmail(email);
@@ -52,7 +58,12 @@ public class UserUtils {
         }
     }
 
-
+    /**
+     * Method that returns true if the user has the specified privilege OR higher.
+     * Owner bypasses these checks.
+     * @param email
+     * @param requiredPrivilege
+     */
     public static boolean hasPrivilege(String email, short requiredPrivilege) {
         if (getOwner() != null && getOwner().getEmail().equals(email))
             return true; // owner has the highest privilege
@@ -62,6 +73,9 @@ public class UserUtils {
         Customer customer = getCustomerByEmail(email);
         return customer != null && customer.getPrivilege() <= requiredPrivilege;
     }
+
+    // --------------------------------------------------------------------------------------------------- \\
+    // wrapper methods
 
     public static List<Staff> getStaffList() { return getEntityList(STAFF_FILE, Staff[].class); }
     public static List<Customer> getCustomerList() { return getEntityList(CUSTOMERS_FILE, Customer[].class); }

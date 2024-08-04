@@ -5,6 +5,11 @@ import com.woflydev.model.enums.PaymentMethod;
 
 import java.time.LocalDateTime;
 
+/**
+ * A Booking object contains all information about a booking.
+ * Contains vital information, including the car, customer initiating the booking, and the driver.
+ * @author woflydev
+ */
 public class Booking {
     private String id;
     private String carId;

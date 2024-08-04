@@ -7,6 +7,7 @@ import java.io.Serial;
 
 /**
  * Custom TableCellRenderer to remove the annoying border outline when selecting a table's cell.
+ * @author woflydev
  */
 public class BorderlessTableRenderer extends DefaultTableCellRenderer {
     @Serial

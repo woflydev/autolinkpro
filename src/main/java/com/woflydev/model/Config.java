@@ -2,6 +2,10 @@ package com.woflydev.model;
 
 import static com.woflydev.model.Globals.*;
 
+/**
+ * Configurable global constants for the application, including where data is stored.
+ * @author woflydev
+ */
 public class Config {
     public static final String CUSTOMERS_FILE = USERS_DIR + "customers.json";
     public static final String STAFF_FILE = USERS_DIR + "staff.json";

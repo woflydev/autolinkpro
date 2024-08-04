@@ -12,6 +12,10 @@ import java.awt.event.ActionListener;
 
 import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
 
+/**
+ * Current only allows for changing of the logged-in user's password.
+ * @author woflydev
+ */
 public class SettingsWindow extends JFrame implements ActionListener {
     public static SettingsWindow instance = null;
 

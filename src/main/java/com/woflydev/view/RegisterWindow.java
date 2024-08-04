@@ -18,6 +18,10 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Allows for user registration.
+ * @author woflydev
+ */
 public class RegisterWindow extends JFrame implements ActionListener {
     private static RegisterWindow instance = null;
 

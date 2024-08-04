@@ -14,6 +14,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * This class is a child of {@link com.woflydev.view.createbooking.BookingDetailsWindow}.
+ * All data validation is handled there.
+ * @author woflydev
+ */
 public class EditBookingWindow extends BookingDetailsWindow {
     public static EditBookingWindow instance = null;
 

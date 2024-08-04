@@ -12,6 +12,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Groups all system administration tools in one place.
+ * @author woflydev
+ */
 public class AdminToolsWindow extends JFrame implements ActionListener {
     public static AdminToolsWindow instance = null;
 

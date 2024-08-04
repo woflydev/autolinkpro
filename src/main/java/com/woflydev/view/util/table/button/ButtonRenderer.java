@@ -8,9 +8,18 @@ import java.awt.*;
 
 import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.*;
 
+/**
+ * Custom table cell renderer designed for extensible buttons.
+ * @author woflydev
+ */
 public class ButtonRenderer extends JPanel implements TableCellRenderer {
     private final JButton[] buttons;
 
+    /**
+     * Takes an array of labels to display on the buttons.
+     * This class should be used with the {@link ButtonEditor} for interactivity.
+     * @param labels
+     */
     public ButtonRenderer(String[] labels) {
         setLayout(new GridBagLayout());
         setOpaque(true);

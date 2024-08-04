@@ -1,5 +1,8 @@
 package com.woflydev.model.entity;
 
+/**
+ * Base class for all users of the system, regardless of privilege level.
+ */
 public class User {
     private String firstName;
     private String lastName;

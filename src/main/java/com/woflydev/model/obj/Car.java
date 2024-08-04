@@ -1,5 +1,8 @@
 package com.woflydev.model.obj;
 
+/**
+ * Contains attributes for any given Car in inventory.
+ */
 public class Car {
     private String id;
     private String make;

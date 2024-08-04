@@ -17,6 +17,10 @@ import static com.woflydev.controller.UserUtils.hasPrivilege;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main screen of the application.
+ * @author woflydev
+ */
 public class HomeWindow extends JFrame implements ActionListener {
     public static HomeWindow instance = null;
     private static List<JFrame> openWindows = new ArrayList<>();

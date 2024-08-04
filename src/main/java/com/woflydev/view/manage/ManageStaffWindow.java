@@ -19,6 +19,10 @@ import java.util.List;
 
 import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
 
+/**
+ * This class lists all current staff in an interactive table.
+ * @author woflydev
+ */
 public class ManageStaffWindow extends JFrame implements ActionListener {
     public static ManageStaffWindow instance = null;
 

@@ -7,11 +7,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.EventObject;
 
+/**
+ * Custom table cell editor designed for extensible buttons.
+ * @author woflydev
+ */
 public class ButtonEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
     private final JPanel panel;
     private final JButton[] buttons;
     private final Runnable[] actions;
 
+    /**
+     * Takes an array of labels and their corresponding actions.
+     * This class should be used with the {@link ButtonRenderer}.
+     * @param checkBox
+     * @param labels
+     * @param actions
+     */
     public ButtonEditor(JCheckBox checkBox, String[] labels, Runnable[] actions) {
         panel = new JPanel(new GridBagLayout());
         this.buttons = new JButton[labels.length];
@@ -66,6 +77,10 @@ public class ButtonEditor extends AbstractCellEditor implements TableCellEditor,
         fireEditingCanceled();
     }
 
+    /**
+     * Overrides JButton#actionPerformed, and selects the correct Runnable to run
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         for (int i = 0; i < buttons.length; i++) {

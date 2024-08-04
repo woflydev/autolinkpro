@@ -25,6 +25,12 @@ import java.util.UUID;
 import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
 import static com.woflydev.model.Globals.CURRENT_USER_EMAIL;
 
+/**
+ * This window requests details about the Booking to be created.
+ * Additionally, it handles data validation.
+ * <p>
+ * This window is the parent of {@link com.woflydev.view.manage.EditBookingWindow}
+ */
 public class BookingDetailsWindow extends JFrame implements ActionListener {
     public static BookingDetailsWindow instance = null;
 

@@ -6,6 +6,9 @@ import java.util.List;
 
 import static com.woflydev.model.Config.CARS_FILE;
 
+/**
+ * A collection of car-specific wrapper methods for FileUtils
+ */
 public class CarUtils {
     public static List<Car> getCarList() { return FileUtils.getEntityList(CARS_FILE, Car[].class); }
     public static void addCar(Car car) { FileUtils.addEntity(car, CARS_FILE, Car[].class); }

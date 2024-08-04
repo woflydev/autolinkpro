@@ -2,6 +2,11 @@ package com.woflydev.model;
 
 import java.io.File;
 
+/**
+ * Static system constants that should not be edited.
+ * Runtime globals are set in the controller, and are referred to by its methods.
+ * @author woflydev
+ */
 public class Globals {
     // static globals
     public static final String USERS_DIR = "data" + File.separator + "users" + File.separator;

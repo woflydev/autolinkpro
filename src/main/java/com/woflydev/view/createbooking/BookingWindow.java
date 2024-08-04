@@ -18,6 +18,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+/**
+ * This window allows the user to choose a car for the booking, before handing off the booking details to {@link BookingDetailsWindow}.
+ * @author woflydev
+ */
 public class BookingWindow extends JFrame implements ActionListener {
     public static BookingWindow instance = null;
 

@@ -3,8 +3,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+/**
+ * A collection of utility methods for applying window settings and displaying dialog boxes.
+ */
 public class WindowUtils
 {
+    // this variable is used to ensure that all open windows are closed when the current user logs out.
+    // open windows are added to it using the register method.
     private static final ArrayList<JFrame> openWindows = new ArrayList<>();
 
     public static void infoBox(String infoMessage) {
@@ -63,6 +68,7 @@ public class WindowUtils
         openWindows.clear();
     }
 
+    // This method should be called whenever a new window is opened.
     public static void register(JFrame frame) {
         if (frame == null) { System.out.println("WARNING! Tried to register a null frame."); return; }
         if (!openWindows.contains(frame)) {

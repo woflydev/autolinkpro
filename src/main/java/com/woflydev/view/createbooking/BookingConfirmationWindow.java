@@ -8,6 +8,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * This window shows after a booking has been successfully created.
+ * It reiterates details of the booking to the user.
+ * @author woflydev
+ */
 public class BookingConfirmationWindow extends JFrame {
     public static BookingConfirmationWindow instance = null;
 
