@@ -11,11 +11,15 @@ import com.woflydev.model.entity.User;
 
 import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.woflydev.model.Config.*;
+import static com.woflydev.model.Globals.SYSTEM_DIR;
+import static com.woflydev.model.Globals.USERS_DIR;
 
 /**
  * A class that provides generic utility methods for working with files and JSON data.
@@ -40,6 +44,21 @@ public class FileUtils {
      * Creates all the necessary files on launch and/or make sure they exist.
      */
     public static void initializeSystem() {
+        String[] all = new String[] {
+                STAFF_FILE,
+                CUSTOMERS_FILE,
+                CARS_FILE,
+                BOOKINGS_FILE,
+        };
+
+        String[] dirs = new String[] {
+                USERS_DIR,
+                SYSTEM_DIR
+        };
+
+        initializeDirectories(dirs);
+        initializeFileList(all);
+
         File ownerFile = new File(OWNER_FILE);
         if (!ownerFile.exists()) {
             System.out.println("NO OWNER FILE DETECTED!");
@@ -47,40 +66,37 @@ public class FileUtils {
                     """
                             Reverting to defaults:
                             Email: admin@autolinkpro.com
-                            Password: admin
+                            Password: changeme
                     """
             );
             Owner owner = new Owner(
                     "Admin",
                     "User",
-                    "admin@autolinkpro.com",
-                    BCryptHash.hashString("admin")
+                    DEFAULT_ADMIN_USERNAME,
+                    BCryptHash.hashString(DEFAULT_ADMIN_PASSWORD)
             );
 
-            ArrayList<Owner> owners = new ArrayList<>();
-            owners.add(owner);
-            saveToDisk(owners, OWNER_FILE);
+            ArrayList<Owner> ao = new ArrayList<Owner>();
+            ao.add(owner);
+            saveToDisk(ao, OWNER_FILE);
         }
+    }
 
-        File staffFile = new File(STAFF_FILE);
-        if (!staffFile.exists()) {
-            System.out.println("Initializing users file...");
-            List<User> users = new ArrayList<>();
-            saveToDisk(users, STAFF_FILE);
+    private static void initializeDirectories(String[] paths) {
+        for (String path : paths) {
+            try { Files.createDirectories(Paths.get(path)); }
+            catch (IOException e){
+                System.out.println("An error occurred while creating the directory: " + path);
+                System.out.println("This is most likely due to lack of permission.");
+                System.exit(1);
+            }
         }
+    }
 
-        File usersFile = new File(CUSTOMERS_FILE);
-        if (!usersFile.exists()) {
-            System.out.println("Initializing users file...");
-            List<User> users = new ArrayList<>();
-            saveToDisk(users, CUSTOMERS_FILE);
-        }
-
-        File carsFile = new File(CARS_FILE);
-        if (!carsFile.exists()) {
-            System.out.println("Initializing cars file...");
-            List<Car> cars = new ArrayList<>();
-            saveToDisk(cars, CARS_FILE);
+    private static void initializeFileList(String[] paths) {
+        for (String path : paths) {
+            File file = new File(path);
+            if (!file.exists()) { saveToDisk(new ArrayList<>(), path); }
         }
     }
 
