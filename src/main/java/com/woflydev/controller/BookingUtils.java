@@ -60,7 +60,6 @@ public class BookingUtils {
         for (Booking booking : bookings) {
             if (booking.getCarId().equals(carId)) {
                 LocalDateTime existingEnd = booking.getEnd().plusMinutes(TURNOVER_TIME);
-
                 if (nextAvailableTime.isBefore(existingEnd)) nextAvailableTime = existingEnd;
             }
         }
