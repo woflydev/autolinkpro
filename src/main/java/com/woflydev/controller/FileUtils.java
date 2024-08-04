@@ -86,6 +86,7 @@ public class FileUtils {
         for (String path : paths) {
             try { Files.createDirectories(Paths.get(path)); }
             catch (IOException e){
+                showIOException();
                 System.out.println("An error occurred while creating the directory: " + path);
                 System.out.println("This is most likely due to lack of permission.");
                 System.exit(1);
@@ -109,6 +110,7 @@ public class FileUtils {
         try (Writer writer = new FileWriter(filename)) {
             gson.toJson(data, writer);
         } catch (IOException e) {
+            showIOException();
             e.printStackTrace();
         }
     }
@@ -125,8 +127,8 @@ public class FileUtils {
             Type listType = TypeToken.getParameterized(List.class, clazz.getComponentType()).getType();
             return gson.fromJson(reader, listType);
         }
-        catch (FileNotFoundException e) { return null; }
-        catch (IOException e) { e.printStackTrace(); return null; }
+        catch (FileNotFoundException e) { showIOException(); return null; }
+        catch (IOException e) { showIOException(); e.printStackTrace(); return null; }
     }
 
     // entity interaction with filesystem ---------------------------------------------- \\
@@ -223,6 +225,7 @@ public class FileUtils {
     ) {
         File dir = new File(directoryPath);
         if (!dir.isDirectory()) {
+            showIOException();
             throw new IllegalArgumentException("Provided path is not a directory");
         }
 
@@ -298,5 +301,24 @@ public class FileUtils {
     @FunctionalInterface
     public interface IdGetter<T> {
         String getId(T entity);
+    }
+
+    public static void showIOException() {
+        WindowUtils.errorBox("""
+                An unexpected error occurred while accessing the file system!
+                It may help to migrate old data to another directory, before running AutoLinkPro again to regenerate file structure.
+               
+                Alternatively, try to fix the file heirarchy yourself:
+                data/
+                    -> system/
+                        -> bookings.json
+                        -> cars.json
+                    -> users/
+                        -> owner.json
+                        -> staff.json
+                        -> customers.json
+                       \s
+                Thank you for using AutoLinkPro!
+               \s""");
     }
 }
