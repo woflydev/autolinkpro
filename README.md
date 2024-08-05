@@ -36,6 +36,7 @@ This will create a executable `.jar` file in the `target/` directory.
 
 > [!NOTE]  
 > The default login (with superuser permissions) is:
+> <br>
 > **user:**`admin@autolinkpro.com`
 > <br>
 > **password:** `changeme`.
