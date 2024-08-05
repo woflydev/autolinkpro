@@ -34,7 +34,11 @@ This will create a executable `.jar` file in the `target/` directory.
 
 `AutoLinkPro` will automatically detect a first boot if no existing data is found. In the case no data is found, it will automatically create a `data/` folder in the directory where it was run.
 
-The default login (with superuser permissions) is `admin@autolinkpro.com` with password `changeme`.
+> [!NOTE]  
+> The default login (with superuser permissions) is:
+> **user:**`admin@autolinkpro.com`
+> <br>
+> **password:** `changeme`.
 
 ## Restoring Corrupt Instances
 
