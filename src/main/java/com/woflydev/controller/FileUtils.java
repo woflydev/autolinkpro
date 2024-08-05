@@ -61,14 +61,18 @@ public class FileUtils {
 
         File ownerFile = new File(OWNER_FILE);
         if (!ownerFile.exists()) {
-            System.out.println("NO OWNER FILE DETECTED!");
-            System.out.println(
-                    """
-                            Reverting to defaults:
-                            Email: admin@autolinkpro.com
-                            Password: changeme
-                    """
-            );
+            WindowUtils.infoBox(String.format("""
+                   Welcome to AutoLink Pro!
+                   
+                   A first startup was detected. This most likely means that existing data either doesn't exist or cannot be detected.
+                   
+                   Default credentials have been created, shown below -\s
+                   Email: %s
+                   Password: %s
+                   
+                   Store these securely, as they will not be shown again.
+                   """, DEFAULT_ADMIN_USERNAME, DEFAULT_ADMIN_PASSWORD));
+            System.out.println("NO OWNER FILE DETECTED! REVERTING TO DEFAULTS");
             Owner owner = new Owner(
                     "Admin",
                     "User",
@@ -76,7 +80,7 @@ public class FileUtils {
                     BCryptHash.hashString(DEFAULT_ADMIN_PASSWORD)
             );
 
-            ArrayList<Owner> ao = new ArrayList<Owner>();
+            ArrayList<Owner> ao = new ArrayList<>();
             ao.add(owner);
             saveToDisk(ao, OWNER_FILE);
         }
