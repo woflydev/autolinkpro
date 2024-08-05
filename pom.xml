@@ -27,6 +27,8 @@
             -Dpackaging=jar
 
         Then just declare as dependency normally.
+
+        THANK YOU TO THIS THING https://mkyong.com/maven/how-to-include-library-manully-into-maven-local-repository/
         -->
         <dependency>
             <groupId>raven.datetime</groupId>
