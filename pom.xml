@@ -15,12 +15,23 @@
     </properties>
 
     <dependencies>
+        <!--
+        TO GET MAVEN TO INCLUDE DEPENDENCIES WHEN BUILDING THE PROJECT, YOU NEED TO DO A LOOOOOOOOT OF FANANGLING WITH IT.
+        OH MY GOD THIS WAS CANCER
+        In order to properly register EXTERNAL jars with Maven, you need to run this stupid command:
+        mvn install:install-file
+            -Dfile=src/main/resources/lib/swing-datetime-picker.jar
+            -DgroupId=raven.datetime
+            -DartifactId=swing-datetime-picker
+            -Dversion=1.3.0
+            -Dpackaging=jar
+
+        Then just declare as dependency normally.
+        -->
         <dependency>
             <groupId>raven.datetime</groupId>
             <artifactId>swing-datetime-picker</artifactId>
             <version>1.3.0</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/swing-datetime-picker.jar</systemPath>
         </dependency>
         <dependency> <!-- dependency for swing-datetime-picker -->
             <groupId>com.miglayout</groupId>
@@ -62,6 +73,7 @@
             <artifactId>maven-assembly-plugin</artifactId>
             <version>3.7.1</version>
         </dependency>
+
     </dependencies>
 
     <!-- oh my god you do not know how long i spent wrangling with Maven to get the dependencies to work -->

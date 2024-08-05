@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.woflydev.controller.FileUtils;
+import com.woflydev.controller.StyleUtils;
 import com.woflydev.controller.UserUtils;
 import com.woflydev.controller.WindowUtils;
 import com.woflydev.model.entity.Customer;
@@ -17,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+
+import static com.woflydev.controller.StyleUtils.BUTTON_STYLES.PRIMARY;
 
 /**
  * Allows for user registration.
@@ -29,8 +32,6 @@ public class RegisterWindow extends JFrame implements ActionListener {
     private JPasswordField passwordField;
     private JSpinner dobSpinner;
     private JButton registerBtn, backBtn;
-
-    private List<User> users;
 
     private RegisterWindow() {
         setTitle("AutoLinkPro - Register");
@@ -90,6 +91,7 @@ public class RegisterWindow extends JFrame implements ActionListener {
         registerBtn.setPreferredSize(new Dimension(120, 30));
         registerBtn.setFocusPainted(false);
         registerBtn.addActionListener(this);
+        StyleUtils.applyButtonStyle(registerBtn, PRIMARY);
 
         backBtn = new JButton("Back");
         backBtn.setPreferredSize(new Dimension(120, 30));
