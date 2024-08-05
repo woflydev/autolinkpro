@@ -131,8 +131,7 @@ public class FileUtils {
             Type listType = TypeToken.getParameterized(List.class, clazz.getComponentType()).getType();
             return gson.fromJson(reader, listType);
         }
-        catch (FileNotFoundException e) { showIOException(); return null; }
-        catch (IOException e) { showIOException(); e.printStackTrace(); return null; }
+        catch (IOException e) { showIOException(); return null; }
     }
 
     // entity interaction with filesystem ---------------------------------------------- \\
