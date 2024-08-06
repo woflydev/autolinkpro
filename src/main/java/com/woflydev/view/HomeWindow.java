@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Main screen of the application.
- * @author woflydev
+ * Author: woflydev
  */
 public class HomeWindow extends JFrame implements ActionListener {
     public static HomeWindow instance = null;
@@ -30,6 +30,7 @@ public class HomeWindow extends JFrame implements ActionListener {
     private JButton settingsButton;
     private JButton adminButton;
     private JButton logoutButton;
+    private JButton aboutButton;
     private JLabel emailLabel;
 
     public HomeWindow() {
@@ -59,6 +60,7 @@ public class HomeWindow extends JFrame implements ActionListener {
         settingsButton = new JButton("Settings");
         adminButton = new JButton("Admin");
         logoutButton = new JButton("Logout");
+        aboutButton = new JButton("About");
         StyleUtils.applyButtonStyle(logoutButton, WARNING);
 
         createBookingButton.setPreferredSize(new Dimension(150, 40));
@@ -66,18 +68,21 @@ public class HomeWindow extends JFrame implements ActionListener {
         settingsButton.setPreferredSize(new Dimension(150, 40));
         adminButton.setPreferredSize(new Dimension(150, 40));
         logoutButton.setPreferredSize(new Dimension(100, 30));
+        aboutButton.setPreferredSize(new Dimension(100, 30));
 
         createBookingButton.setFocusPainted(false);
         manageBookingsButton.setFocusPainted(false);
         settingsButton.setFocusPainted(false);
         adminButton.setFocusPainted(false);
         logoutButton.setFocusPainted(false);
+        aboutButton.setFocusPainted(false);
 
         createBookingButton.addActionListener(this);
         manageBookingsButton.addActionListener(this);
         settingsButton.addActionListener(this);
         adminButton.addActionListener(this);
         logoutButton.addActionListener(this);
+        aboutButton.addActionListener(this);
 
         gbc.gridwidth = 1;
 
@@ -94,12 +99,15 @@ public class HomeWindow extends JFrame implements ActionListener {
         gbc.gridy = 2;
         mainPanel.add(settingsButton, gbc);
 
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-
         if (hasPrivilege(Globals.CURRENT_USER_EMAIL, PRIVILEGE_STAFF)) {
+            gbc.gridx = 1;
+            gbc.gridy = 2;
             mainPanel.add(adminButton, gbc);
         }
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        mainPanel.add(aboutButton, gbc);
 
         add(mainPanel, BorderLayout.CENTER);
 
@@ -111,10 +119,12 @@ public class HomeWindow extends JFrame implements ActionListener {
         emailLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         footerPanel.add(emailLabel, BorderLayout.WEST);
 
+        aboutButton.setPreferredSize(new Dimension(100, 30));
         logoutButton.setPreferredSize(new Dimension(100, 30));
         JPanel logoutPanel = new JPanel();
         logoutPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         logoutPanel.setOpaque(false);
+        logoutPanel.add(aboutButton);
         logoutPanel.add(logoutButton);
 
         footerPanel.add(logoutPanel, BorderLayout.EAST);
@@ -140,6 +150,15 @@ public class HomeWindow extends JFrame implements ActionListener {
             AdminToolsWindow.open();
         } else if (e.getSource() == logoutButton) {
             handleLogout();
+        } else if (e.getSource() == aboutButton) {
+            WindowUtils.infoBox("""
+                    Thank you for using AutoLink Pro!
+                    
+                    A Swing UI application built using FlatLaf.
+                    Data stored using Google's gson library in the JSON format.
+                    
+                    Written by woflydev.
+                    """);
         }
     }
 
