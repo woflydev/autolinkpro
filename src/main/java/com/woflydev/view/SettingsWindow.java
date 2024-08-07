@@ -128,9 +128,19 @@ public class SettingsWindow extends JFrame implements ActionListener {
 
             if (UserUtils.authenticate(Globals.CURRENT_USER_EMAIL, oldPassword)) {
                 if (newPassword.length() >= 6) {
-                    UserUtils.updatePassword(Globals.CURRENT_USER_EMAIL, newPassword);
-                    WindowUtils.infoBox("Password changed successfully!");
-                    changePasswordDialog.dispose();
+                    try {
+                        UserUtils.updatePassword(Globals.CURRENT_USER_EMAIL, newPassword);
+                        WindowUtils.infoBox("Password changed successfully!");
+                        changePasswordDialog.dispose();
+                    } catch (Exception exception) {
+                        WindowUtils.errorBox(String.format("""
+                                There was an error when updating your password.
+                                Your new password was most likely too long.
+                                
+                                Error:
+                                %s\s
+                                """, exception));
+                    }
                 } else WindowUtils.errorBox("New password must be at least 6 characters long.");
             } else WindowUtils.errorBox("Old password is incorrect.");
         });
